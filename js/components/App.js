@@ -7,7 +7,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navibar params={this.props.params} />
+				<Navibar history={this.props.history} params={this.props.params} />
 				<div className="container">
 					{this.props.children}
 				</div>

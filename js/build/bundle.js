@@ -40,7 +40,7 @@ var App = (function (_React$Component) {
 			return _react2["default"].createElement(
 				"div",
 				null,
-				_react2["default"].createElement(_Navibar2["default"], { params: this.props.params }),
+				_react2["default"].createElement(_Navibar2["default"], { history: this.props.history, params: this.props.params }),
 				_react2["default"].createElement(
 					"div",
 					{ className: "container" },
@@ -89,7 +89,8 @@ var Countries = (function (_React$Component) {
 
 		_get(Object.getPrototypeOf(Countries.prototype), "constructor", this).call(this, props);
 		this.state = {
-			"countries": {}
+			"countries": {},
+			"original": {}
 		};
 	}
 
@@ -98,11 +99,48 @@ var Countries = (function (_React$Component) {
 	_createClass(Countries, [{
 		key: "componentDidMount",
 		value: function componentDidMount() {
+
 			$.getJSON("/data/countries.json", (function (countries) {
+
+				this.setState({
+					"countries": countries,
+					"original": countries
+				});
+			}).bind(this));
+		}
+
+		// COMPONENT WILL RECEIVE PROPS
+	}, {
+		key: "componentWillReceiveProps",
+		value: function componentWillReceiveProps(nextProps) {
+
+			var query = nextProps.params.query;
+			if (query && query.length > 0) {
+
+				var countries = {};
+
+				for (var area in this.state.original) {
+					countries[area] = [];
+					for (var c in this.state.original[area]) {
+						var country = this.state.original[area][c];
+						if (country.name.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+							countries[area].push(country);
+						}
+					}
+
+					if (countries[area].length === 0) {
+						delete countries[area];
+					}
+				}
+
 				this.setState({
 					"countries": countries
 				});
-			}).bind(this));
+			} else {
+				this.setState({
+					"countries": this.state.original
+				});
+			}
 		}
 
 		// RENDER
@@ -300,9 +338,26 @@ var Navibar = (function (_React$Component) {
 	}
 
 	_createClass(Navibar, [{
-		key: "render",
+		key: "keyUp",
+
+		// KEY UP
+		value: function keyUp(e) {
+
+			// ESC clears selection
+			if (e.keyCode === 27) {
+
+				e.target.value = "";
+				this.props.history.pushState(null, "/");
+				return;
+			}
+
+			var v = e.target.value;
+			this.props.history.replaceState(null, "/countries/" + encodeURIComponent(v));
+		}
 
 		// RENDER
+	}, {
+		key: "render",
 		value: function render() {
 
 			console.log(this.props.params);
@@ -330,12 +385,12 @@ var Navibar = (function (_React$Component) {
 							"center",
 							null,
 							_react2["default"].createElement(
-								"form",
+								"div",
 								{ className: "navbar-form search-center", role: "search" },
 								_react2["default"].createElement(
 									"div",
 									{ className: "form-group" },
-									_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries" })
+									_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries", onKeyUp: this.keyUp.bind(this) })
 								)
 							)
 						)
@@ -415,6 +470,8 @@ exports["default"] = _react2["default"].createElement(
 	_reactRouter.Route,
 	{ component: _componentsApp2["default"] },
 	_react2["default"].createElement(_reactRouter.Route, { path: "/", component: _componentsCountries2["default"] }),
+	_react2["default"].createElement(_reactRouter.Route, { path: "/countries", component: _componentsCountries2["default"] }),
+	_react2["default"].createElement(_reactRouter.Route, { path: "/countries/:query", component: _componentsCountries2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug", component: _componentsCountry2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug/:part", component: _componentsCountry2["default"] })
 );

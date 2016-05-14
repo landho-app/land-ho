@@ -7,17 +7,54 @@ class Countries extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			"countries": {}
+			"countries": {},
+			"original": {}
 		};
 	}
 
 	// COMPONENT DID MOUNT
 	componentDidMount() {
+
 		$.getJSON("/data/countries.json", function(countries) {
+
+			this.setState({
+				"countries": countries,
+				"original": countries
+			});
+		}.bind(this));
+	}
+
+	// COMPONENT WILL RECEIVE PROPS
+	componentWillReceiveProps(nextProps) {
+
+		var query = nextProps.params.query;
+		if(query && query.length > 0) {
+
+			var countries = {};
+
+			for(var area in this.state.original) {
+				countries[area] = [];
+				for(var c in this.state.original[area]) {
+					var country = this.state.original[area][c];
+					if(country.name.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
+						countries[area].push(country);
+					}
+				}
+
+				if(countries[area].length === 0) {
+					delete countries[area];
+				}
+			}
+
 			this.setState({
 				"countries": countries
 			});
-		}.bind(this));
+		}
+		else {
+			this.setState({
+				"countries": this.state.original
+			});
+		}
 	}
 
 	// RENDER
@@ -29,6 +66,7 @@ class Countries extends React.Component {
 				<div className="col-md-4">
 
 					{Object.keys(this.state.countries).map(area => (
+
 						<div className="list-group" key={area}>
 							<a className="list-group-item disabled">
 								{area}

@@ -7,6 +7,8 @@ import Country from "./components/Country";
 export default (
 	<Route component={App}>
 		<Route path="/" component={Countries} />
+		<Route path="/countries" component={Countries} />
+		<Route path="/countries/:query" component={Countries} />
 		<Route path="/country/:slug" component={Country} />
 		<Route path="/country/:slug/:part" component={Country} />
 	</Route>

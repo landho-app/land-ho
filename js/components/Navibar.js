@@ -3,6 +3,21 @@ import {Link} from "react-router";
 
 class Navibar extends React.Component {
 
+	// KEY UP
+	keyUp(e) {
+
+		// ESC clears selection
+		if(e.keyCode === 27) {
+
+			e.target.value = "";
+			this.props.history.pushState(null, "/");
+			return;
+		}
+
+		var v = e.target.value;
+		this.props.history.replaceState(null, "/countries/" + encodeURIComponent(v));
+	}
+
 	// RENDER
 	render() {
 
@@ -24,11 +39,11 @@ class Navibar extends React.Component {
 	  				  	</Link>
 					}
 				  <center>
-					  <form className="navbar-form search-center" role="search">
+					  <div className="navbar-form search-center" role="search">
 						  <div className="form-group">
-							<input type="text" width="200" className="form-control" placeholder="Search countries" />
+							<input type="text" width="200" className="form-control" placeholder="Search countries" onKeyUp={this.keyUp.bind(this)} />
 						  </div>
-					  </form>
+					  </div>
 				  </center>
 		        </div>
 		      </div>
