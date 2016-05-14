@@ -6,3 +6,15 @@ body {
 	display: inline!important;
 	margin-right: 15px;
 }
+
+.search-center {
+	position:absolute;
+	width:300px;
+	margin-left:-150px;
+	left:50%;
+	padding:0!important;
+}
+
+.search-center input {
+	width:300px!important;
+}

@@ -3,7 +3,6 @@ var gutil = require("gulp-util");
 var gulpif = require("gulp-if");
 var streamify = require("gulp-streamify");
 var autoprefixer = require("gulp-autoprefixer");
-var cssmin = require("gulp-cssmin");
 var less = require("gulp-less");
 var concat = require("gulp-concat");
 var plumber = require("gulp-plumber");
@@ -12,7 +11,6 @@ var babelify = require("babelify");
 var browserify = require("browserify");
 var watchify = require("watchify");
 var uglify = require("gulp-uglify");
-var minifyCss = require("gulp-minify-css");
 
 var production = process.env.NODE_ENV === "production";
 
@@ -32,31 +30,13 @@ var dependencies = [
 gulp.task("vendor", function() {
 	return gulp.src([
 			"bower_components/jquery/dist/jquery.js",
-			"bower_components/bootstrap/dist/js/bootstrap.js",
-			"bower_components/moment/min/moment-with-locales.js",
-			"bower_components/sweetalert2/dist/sweetalert2.min.js"
+			"bower_components/bootstrap/dist/js/bootstrap.js"
 		])
 		.pipe(concat("vendor.js"))
 		.pipe(gulpif(production, uglify({
 			mangle: false
 		})))
 		.pipe(gulp.dest("js/build"));
-});
-
-/*
- |--------------------------------------------------------------------------
- | Combine all CSS libraries into a single file for fewer HTTP requests.
- |--------------------------------------------------------------------------
- */
-gulp.task("vendor-css", function() {
-	return gulp.src([
-			"css/bootstrap.css",
-			"bower_components/sweetalert2/dist/sweetalert2.css",
-			"css/index.css"
-		])
-		.pipe(concat("vendor.css"))
-		.pipe(minifyCss({compatibility: "ie8"}))
-		.pipe(gulp.dest("css"));
 });
 
 /*

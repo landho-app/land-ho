@@ -40,7 +40,7 @@ var App = (function (_React$Component) {
 			return _react2["default"].createElement(
 				"div",
 				null,
-				_react2["default"].createElement(_Navibar2["default"], null),
+				_react2["default"].createElement(_Navibar2["default"], { params: this.props.params }),
 				_react2["default"].createElement(
 					"div",
 					{ className: "container" },
@@ -98,7 +98,7 @@ var Countries = (function (_React$Component) {
 	_createClass(Countries, [{
 		key: "componentDidMount",
 		value: function componentDidMount() {
-			$.getJSON("data/countries.json", (function (countries) {
+			$.getJSON("/data/countries.json", (function (countries) {
 				this.setState({
 					"countries": countries
 				});
@@ -169,35 +169,105 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Countries = require("./Countries");
+var _reactRouter = require("react-router");
 
-var _Countries2 = _interopRequireDefault(_Countries);
+var Country = (function (_React$Component) {
+	_inherits(Country, _React$Component);
 
-var Home = (function (_React$Component) {
-	_inherits(Home, _React$Component);
+	// CONSTRUCTOR
 
-	function Home() {
-		_classCallCheck(this, Home);
+	function Country(props) {
+		_classCallCheck(this, Country);
 
-		_get(Object.getPrototypeOf(Home.prototype), "constructor", this).apply(this, arguments);
+		_get(Object.getPrototypeOf(Country.prototype), "constructor", this).call(this, props);
+		this.state = {
+			"content": null
+		};
 	}
 
-	_createClass(Home, [{
-		key: "render",
+	// COMPONENT DID MOUNT
+
+	_createClass(Country, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+
+			var part = this.props.params.part || "profile";
+			var slug = this.props.params.slug;
+
+			this.loadData(slug, part);
+		}
+
+		// COMPONENT WILL RECEIVE PROPS
+	}, {
+		key: "componentWillReceiveProps",
+		value: function componentWillReceiveProps(nextProps) {
+
+			var part = nextProps.params.part || "profile";
+			var slug = nextProps.params.slug;
+			this.loadData(slug, part);
+		}
+
+		// LOAD DATA
+	}, {
+		key: "loadData",
+		value: function loadData(slug, part) {
+			$.get("/data/" + slug + "/" + part + ".html", (function (content) {
+
+				// fix image paths
+				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
+
+				this.setState({
+					"content": content
+				});
+			}).bind(this));
+		}
 
 		// RENDER
+	}, {
+		key: "render",
 		value: function render() {
-			return _react2["default"].createElement(_Countries2["default"], null);
+
+			return _react2["default"].createElement(
+				"div",
+				{ className: "row" },
+				_react2["default"].createElement(
+					"div",
+					{ className: "col-md-3" },
+					_react2["default"].createElement(
+						"div",
+						{ className: "list-group", "data-spy": "affix", "data-offset-top": "60", "data-offset-bottom": "200" },
+						_react2["default"].createElement(
+							_reactRouter.Link,
+							{ to: "/country/" + this.props.params.slug + "/profile", className: "list-group-item" },
+							_react2["default"].createElement("i", { className: "fa fa-user fa-fw", "aria-hidden": "true" }),
+							" Profile"
+						),
+						_react2["default"].createElement(
+							_reactRouter.Link,
+							{ to: "/country/" + this.props.params.slug + "/general", className: "list-group-item" },
+							_react2["default"].createElement("i", { className: "fa fa-globe fa-fw", "aria-hidden": "true" }),
+							" General Info"
+						),
+						_react2["default"].createElement(
+							_reactRouter.Link,
+							{ to: "/country/" + this.props.params.slug + "/formalities", className: "list-group-item" },
+							_react2["default"].createElement("i", { className: "fa fa-book fa-fw", "aria-hidden": "true" }),
+							" Formalities"
+						)
+					)
+				),
+				_react2["default"].createElement("div", { className: "col-md-9", dangerouslySetInnerHTML: { __html: this.state.content } })
+			);
 		}
 	}]);
 
-	return Home;
+	return Country;
 })(_react2["default"].Component);
 
-exports["default"] = Home;
+exports["default"] = Country;
 module.exports = exports["default"];
 
-},{"./Countries":2,"react":"react"}],4:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -218,6 +288,8 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require("react-router");
+
 var Navibar = (function (_React$Component) {
 	_inherits(Navibar, _React$Component);
 
@@ -232,6 +304,9 @@ var Navibar = (function (_React$Component) {
 
 		// RENDER
 		value: function render() {
+
+			console.log(this.props.params);
+
 			return _react2["default"].createElement(
 				"div",
 				{ className: "navbar navbar-default navbar-fixed-top" },
@@ -241,30 +316,27 @@ var Navibar = (function (_React$Component) {
 					_react2["default"].createElement(
 						"div",
 						{ className: "navbar-header" },
-						_react2["default"].createElement(
-							"a",
-							{ href: "../", className: "navbar-brand" },
+						"slug" in this.props.params ? _react2["default"].createElement(
+							_reactRouter.Link,
+							{ to: "/", className: "navbar-brand" },
+							_react2["default"].createElement("i", { className: "fa fa-arrow-left fa-fw" })
+						) : _react2["default"].createElement(
+							_reactRouter.Link,
+							{ to: "/", className: "navbar-brand" },
 							_react2["default"].createElement("img", { className: "navbar-brand-img", src: "img/icon.png", height: "24" }),
 							"Land ho!"
 						),
 						_react2["default"].createElement(
-							"button",
-							{ className: "navbar-toggle collapsed", type: "button", "data-toggle": "collapse", "data-target": "#navbar-main", "aria-expanded": "false" },
-							_react2["default"].createElement("span", { className: "icon-bar" }),
-							_react2["default"].createElement("span", { className: "icon-bar" }),
-							_react2["default"].createElement("span", { className: "icon-bar" })
-						)
-					),
-					_react2["default"].createElement(
-						"div",
-						{ className: "navbar-collapse collapse", id: "navbar-main", "aria-expanded": "false" },
-						_react2["default"].createElement(
-							"form",
-							{ className: "navbar-form navbar-left", role: "search" },
+							"center",
+							null,
 							_react2["default"].createElement(
-								"div",
-								{ className: "form-group" },
-								_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries" })
+								"form",
+								{ className: "navbar-form search-center", role: "search" },
+								_react2["default"].createElement(
+									"div",
+									{ className: "form-group" },
+									_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries" })
+								)
 							)
 						)
 					)
@@ -279,7 +351,7 @@ var Navibar = (function (_React$Component) {
 exports["default"] = Navibar;
 module.exports = exports["default"];
 
-},{"react":"react"}],5:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -304,7 +376,6 @@ var _routes = require("./routes");
 
 var _routes2 = _interopRequireDefault(_routes);
 
-window.moment.locale("de");
 var history = (0, _historyLibCreateBrowserHistory2["default"])();
 
 _reactDom2["default"].render(_react2["default"].createElement(
@@ -332,18 +403,24 @@ var _componentsApp = require("./components/App");
 
 var _componentsApp2 = _interopRequireDefault(_componentsApp);
 
-var _componentsHome = require("./components/Home");
+var _componentsCountries = require("./components/Countries");
 
-var _componentsHome2 = _interopRequireDefault(_componentsHome);
+var _componentsCountries2 = _interopRequireDefault(_componentsCountries);
+
+var _componentsCountry = require("./components/Country");
+
+var _componentsCountry2 = _interopRequireDefault(_componentsCountry);
 
 exports["default"] = _react2["default"].createElement(
 	_reactRouter.Route,
 	{ component: _componentsApp2["default"] },
-	_react2["default"].createElement(_reactRouter.Route, { path: "/", component: _componentsHome2["default"] })
+	_react2["default"].createElement(_reactRouter.Route, { path: "/", component: _componentsCountries2["default"] }),
+	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug", component: _componentsCountry2["default"] }),
+	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug/:part", component: _componentsCountry2["default"] })
 );
 module.exports = exports["default"];
 
-},{"./components/App":1,"./components/Home":3,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
+},{"./components/App":1,"./components/Countries":2,"./components/Country":3,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
