@@ -19,6 +19,10 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _Navibar = require("./Navibar");
+
+var _Navibar2 = _interopRequireDefault(_Navibar);
+
 var App = (function (_React$Component) {
 	_inherits(App, _React$Component);
 
@@ -30,13 +34,18 @@ var App = (function (_React$Component) {
 
 	_createClass(App, [{
 		key: "render",
+
+		// RENDER
 		value: function render() {
 			return _react2["default"].createElement(
 				"div",
 				null,
-				" ",
-				this.props.children,
-				" "
+				_react2["default"].createElement(_Navibar2["default"], null),
+				_react2["default"].createElement(
+					"div",
+					{ className: "container" },
+					this.props.children
+				)
 			);
 		}
 	}]);
@@ -47,7 +56,7 @@ var App = (function (_React$Component) {
 exports["default"] = App;
 module.exports = exports["default"];
 
-},{"react":"react"}],2:[function(require,module,exports){
+},{"./Navibar":4,"react":"react"}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68,6 +77,102 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require("react-router");
+
+var Countries = (function (_React$Component) {
+	_inherits(Countries, _React$Component);
+
+	// CONSTRUCTOR
+
+	function Countries(props) {
+		_classCallCheck(this, Countries);
+
+		_get(Object.getPrototypeOf(Countries.prototype), "constructor", this).call(this, props);
+		this.state = {
+			"countries": {}
+		};
+	}
+
+	// COMPONENT DID MOUNT
+
+	_createClass(Countries, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+			$.getJSON("data/countries.json", (function (countries) {
+				this.setState({
+					"countries": countries
+				});
+			}).bind(this));
+		}
+
+		// RENDER
+	}, {
+		key: "render",
+		value: function render() {
+			var _this = this;
+
+			return _react2["default"].createElement(
+				"div",
+				{ className: "row" },
+				_react2["default"].createElement("div", { className: "col-md-4" }),
+				_react2["default"].createElement(
+					"div",
+					{ className: "col-md-4" },
+					Object.keys(this.state.countries).map(function (area) {
+						return _react2["default"].createElement(
+							"div",
+							{ className: "list-group", key: area },
+							_react2["default"].createElement(
+								"a",
+								{ className: "list-group-item disabled" },
+								area
+							),
+							_this.state.countries[area].map(function (c) {
+								return _react2["default"].createElement(
+									_reactRouter.Link,
+									{ key: c.slug, to: "/country/" + c.slug, className: "list-group-item" },
+									c.name
+								);
+							})
+						);
+					})
+				),
+				_react2["default"].createElement("div", { className: "col-md-4" })
+			);
+		}
+	}]);
+
+	return Countries;
+})(_react2["default"].Component);
+
+exports["default"] = Countries;
+module.exports = exports["default"];
+
+},{"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Countries = require("./Countries");
+
+var _Countries2 = _interopRequireDefault(_Countries);
+
 var Home = (function (_React$Component) {
 	_inherits(Home, _React$Component);
 
@@ -79,8 +184,10 @@ var Home = (function (_React$Component) {
 
 	_createClass(Home, [{
 		key: "render",
+
+		// RENDER
 		value: function render() {
-			return _react2["default"].createElement("div", { className: "row" });
+			return _react2["default"].createElement(_Countries2["default"], null);
 		}
 	}]);
 
@@ -90,7 +197,89 @@ var Home = (function (_React$Component) {
 exports["default"] = Home;
 module.exports = exports["default"];
 
-},{"react":"react"}],3:[function(require,module,exports){
+},{"./Countries":2,"react":"react"}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var Navibar = (function (_React$Component) {
+	_inherits(Navibar, _React$Component);
+
+	function Navibar() {
+		_classCallCheck(this, Navibar);
+
+		_get(Object.getPrototypeOf(Navibar.prototype), "constructor", this).apply(this, arguments);
+	}
+
+	_createClass(Navibar, [{
+		key: "render",
+
+		// RENDER
+		value: function render() {
+			return _react2["default"].createElement(
+				"div",
+				{ className: "navbar navbar-default navbar-fixed-top" },
+				_react2["default"].createElement(
+					"div",
+					{ className: "container" },
+					_react2["default"].createElement(
+						"div",
+						{ className: "navbar-header" },
+						_react2["default"].createElement(
+							"a",
+							{ href: "../", className: "navbar-brand" },
+							_react2["default"].createElement("img", { className: "navbar-brand-img", src: "img/icon.png", height: "24" }),
+							"Land ho!"
+						),
+						_react2["default"].createElement(
+							"button",
+							{ className: "navbar-toggle collapsed", type: "button", "data-toggle": "collapse", "data-target": "#navbar-main", "aria-expanded": "false" },
+							_react2["default"].createElement("span", { className: "icon-bar" }),
+							_react2["default"].createElement("span", { className: "icon-bar" }),
+							_react2["default"].createElement("span", { className: "icon-bar" })
+						)
+					),
+					_react2["default"].createElement(
+						"div",
+						{ className: "navbar-collapse collapse", id: "navbar-main", "aria-expanded": "false" },
+						_react2["default"].createElement(
+							"form",
+							{ className: "navbar-form navbar-left", role: "search" },
+							_react2["default"].createElement(
+								"div",
+								{ className: "form-group" },
+								_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries" })
+							)
+						)
+					)
+				)
+			);
+		}
+	}]);
+
+	return Navibar;
+})(_react2["default"].Component);
+
+exports["default"] = Navibar;
+module.exports = exports["default"];
+
+},{"react":"react"}],5:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -124,7 +313,7 @@ _reactDom2["default"].render(_react2["default"].createElement(
   _routes2["default"]
 ), document.getElementById("app"));
 
-},{"./routes":4,"history/lib/createBrowserHistory":13,"react":"react","react-dom":"react-dom","react-router":"react-router"}],4:[function(require,module,exports){
+},{"./routes":6,"history/lib/createBrowserHistory":15,"react":"react","react-dom":"react-dom","react-router":"react-router"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -154,7 +343,7 @@ exports["default"] = _react2["default"].createElement(
 );
 module.exports = exports["default"];
 
-},{"./components/App":1,"./components/Home":2,"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
+},{"./components/App":1,"./components/Home":3,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -250,7 +439,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":6,"./lib/keys.js":7}],6:[function(require,module,exports){
+},{"./lib/is_arguments.js":8,"./lib/keys.js":9}],8:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -272,7 +461,7 @@ function unsupported(object){
     false;
 };
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -283,7 +472,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -315,7 +504,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -342,7 +531,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -413,7 +602,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":22,"warning":23}],11:[function(require,module,exports){
+},{"_process":24,"warning":25}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -494,13 +683,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -681,7 +870,7 @@ function createBrowserHistory() {
 exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":8,"./DOMStateStorage":10,"./DOMUtils":11,"./ExecutionEnvironment":12,"./createDOMHistory":14,"./parsePath":19,"_process":22,"invariant":21}],14:[function(require,module,exports){
+},{"./Actions":10,"./DOMStateStorage":12,"./DOMUtils":13,"./ExecutionEnvironment":14,"./createDOMHistory":16,"./parsePath":21,"_process":24,"invariant":23}],16:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -724,7 +913,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":11,"./ExecutionEnvironment":12,"./createHistory":15,"_process":22,"invariant":21}],15:[function(require,module,exports){
+},{"./DOMUtils":13,"./ExecutionEnvironment":14,"./createHistory":17,"_process":24,"invariant":23}],17:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -1016,7 +1205,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":8,"./AsyncUtils":9,"./createLocation":16,"./deprecate":17,"./parsePath":19,"./runTransitionHook":20,"deep-equal":5}],16:[function(require,module,exports){
+},{"./Actions":10,"./AsyncUtils":11,"./createLocation":18,"./deprecate":19,"./parsePath":21,"./runTransitionHook":22,"deep-equal":7}],18:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -1071,7 +1260,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":8,"./parsePath":19}],17:[function(require,module,exports){
+},{"./Actions":10,"./parsePath":21}],19:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -1087,7 +1276,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1101,7 +1290,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1148,7 +1337,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":18,"_process":22,"warning":23}],20:[function(require,module,exports){
+},{"./extractPath":20,"_process":24,"warning":25}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1175,7 +1364,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":22,"warning":23}],21:[function(require,module,exports){
+},{"_process":24,"warning":25}],23:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1230,7 +1419,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":22}],22:[function(require,module,exports){
+},{"_process":24}],24:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1326,7 +1515,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1390,4 +1579,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":22}]},{},[3]);
+},{"_process":24}]},{},[5]);

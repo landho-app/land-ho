@@ -12,6 +12,7 @@ var babelify = require("babelify");
 var browserify = require("browserify");
 var watchify = require("watchify");
 var uglify = require("gulp-uglify");
+var minifyCss = require("gulp-minify-css");
 
 var production = process.env.NODE_ENV === "production";
 
@@ -40,6 +41,22 @@ gulp.task("vendor", function() {
 			mangle: false
 		})))
 		.pipe(gulp.dest("js/build"));
+});
+
+/*
+ |--------------------------------------------------------------------------
+ | Combine all CSS libraries into a single file for fewer HTTP requests.
+ |--------------------------------------------------------------------------
+ */
+gulp.task("vendor-css", function() {
+	return gulp.src([
+			"css/bootstrap.css",
+			"bower_components/sweetalert2/dist/sweetalert2.css",
+			"css/index.css"
+		])
+		.pipe(concat("vendor.css"))
+		.pipe(minifyCss({compatibility: "ie8"}))
+		.pipe(gulp.dest("css"));
 });
 
 /*
@@ -94,12 +111,12 @@ gulp.task("browserify-watch", ["browserify-vendor"], function() {
 				gutil.log(gutil.colors.red(err.toString()));
 			})
 			.on("end", function() {
-				gutil.log(gutil.colors.green("Finished rebundling in", (Date.now() - start) + "ms."));
+				gutil.log(gutil.colors.green("Finished rebundling JS in", (Date.now() - start) + "ms."));
 			})
 			.pipe(source("bundle.js"))
 			.pipe(gulp.dest("js/build"));
 	}
 });
 
-gulp.task("default", ["vendor", "browserify-watch"]);
-gulp.task("build", ["vendor", "browserify"]);
+gulp.task("default", ["vendor", "vendor-css", "browserify-watch"]);
+gulp.task("build", ["vendor", "vendor-css", "browserify"]);
