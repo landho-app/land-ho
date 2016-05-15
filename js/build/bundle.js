@@ -169,7 +169,12 @@ var Countries = (function (_React$Component) {
 								return _react2["default"].createElement(
 									_reactRouter.Link,
 									{ key: c.slug, to: "/country/" + c.slug, className: "list-group-item" },
-									c.name
+									c.flag ? _react2["default"].createElement("img", { className: "flag-icon", src: "/data/" + c.slug + c.flag, width: "30", height: "20" }) : _react2["default"].createElement("img", { src: "/img/spacer.png", width: "30", height: "20" }),
+									_react2["default"].createElement(
+										"span",
+										{ className: "country-list-span" },
+										c.name
+									)
 								);
 							})
 						);

@@ -73,7 +73,10 @@ class Countries extends React.Component {
 							</a>
 
 							{this.state.countries[area].map(c => (
-								<Link key={c.slug} to={"/country/" + c.slug} className="list-group-item">{c.name}</Link>
+								<Link key={c.slug} to={"/country/" + c.slug} className="list-group-item">
+									{(c.flag) ? <img className="flag-icon" src={"/data/" + c.slug + c.flag} width="30" height="20" /> : <img src="/img/spacer.png" width="30" height="20" />}
+									<span className="country-list-span">{c.name}</span>
+								</Link>
 							))}
 						</div>
 					))}

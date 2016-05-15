@@ -18,3 +18,12 @@ body {
 .search-center input {
 	width:300px!important;
 }
+
+.country-list-span {
+	margin-left:15px;
+}
+
+.flag-spacer {
+	width:30px;
+	height:1px;
+}
