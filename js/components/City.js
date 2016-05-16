@@ -33,7 +33,7 @@ class City extends React.Component {
 	loadData(slug, cityslug) {
 		var that = this;
 
-		$.get("/data/" + slug + "/city/" + cityslug + ".html", function(content) {
+		$.get("data/" + slug + "/city/" + cityslug + ".html", function(content) {
 
 			// fix image paths
 			content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");

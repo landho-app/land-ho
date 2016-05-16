@@ -15,7 +15,7 @@ class Countries extends React.Component {
 	// COMPONENT DID MOUNT
 	componentDidMount() {
 
-		$.getJSON("/data/countries.json", function(countries) {
+		$.getJSON("data/countries.json", function(countries) {
 
 			this.setState({
 				"countries": countries,

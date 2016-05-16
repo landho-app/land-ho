@@ -120,7 +120,7 @@ var City = (function (_React$Component) {
 		value: function loadData(slug, cityslug) {
 			var that = this;
 
-			$.get("/data/" + slug + "/city/" + cityslug + ".html", (function (content) {
+			$.get("data/" + slug + "/city/" + cityslug + ".html", (function (content) {
 
 				// fix image paths
 				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
@@ -255,7 +255,7 @@ var Countries = (function (_React$Component) {
 		key: "componentDidMount",
 		value: function componentDidMount() {
 
-			$.getJSON("/data/countries.json", (function (countries) {
+			$.getJSON("data/countries.json", (function (countries) {
 
 				this.setState({
 					"countries": countries,
@@ -423,7 +423,7 @@ var Country = (function (_React$Component) {
 		value: function loadData(slug, part) {
 			var that = this;
 
-			$.get("/data/" + slug + "/" + part + ".html", (function (content) {
+			$.get("data/" + slug + "/" + part + ".html", (function (content) {
 
 				// fix image paths
 				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
