@@ -21,8 +21,6 @@ class Navibar extends React.Component {
 	// RENDER
 	render() {
 
-		console.log(this.props.params);
-
 		return (
 			<div className="navbar navbar-default navbar-fixed-top">
 		      <div className="container">

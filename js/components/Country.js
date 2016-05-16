@@ -25,19 +25,85 @@ class Country extends React.Component {
 
 		var part = nextProps.params.part || "profile";
 		var slug = nextProps.params.slug;
+
 		this.loadData(slug, part);
+	}
+
+	// SLUGIFY
+	slugify(text)
+	{
+		return text.toLowerCase()
+		  .replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
+		  .replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
+		  .replace(/^-+|-+$/g, ''); // remove leading, trailing -
 	}
 
 	// LOAD DATA
 	loadData(slug, part) {
+		var that = this;
+
 		$.get("/data/" + slug + "/" + part + ".html", function(content) {
 
 			// fix image paths
 			content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
 
-			this.setState({
-				"content": content
+			// attach external link icon to external links
+			var $c = $(content);
+			$c.find("a").each(function(i, el) {
+
+				var href = $(this).attr("href");
+
+				console.log(href );
+
+				// mailto
+				if(href.indexOf("mailto:") !== -1) {
+					$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
+				}
+
+				// external link
+				else if(href.indexOf("noonsite.com") === -1 && href.indexOf("http") === 0) {
+					$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+					$(this).attr("target", "_blank");
+				}
+
+				// internal links
+				else if(href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) {
+
+					var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
+					var tmp_splitted = tmp.split("/");
+
+					var visited_country = false;
+					for(var j in tmp_splitted) {
+
+						if(visited_country === true) {
+							tmp_splitted[j] = that.slugify(tmp_splitted[j]);
+						}
+
+						if(tmp_splitted[j] === "country") {
+							visited_country = true;
+						}
+					}
+
+					$(this).attr("href", tmp_splitted.join("/"));
+				}
+
+				// a relative link but not /Countries
+				else {
+
+					if(href[0] !== "/") {
+						href = "/" + href;
+					}
+
+					$(this).attr("href", "http://www.noonsite.com" + href);
+					$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+					$(this).attr("target", "_blank");
+				}
 			});
+
+			this.setState({
+				"content": $c.html()
+			});
+
 		}.bind(this));
 	}
 
@@ -47,7 +113,7 @@ class Country extends React.Component {
 		return (
 			<div className="row">
 				<div className="col-md-3">
-					<div className="list-group" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+					<div className="list-group">
 						<Link to={"/country/" + this.props.params.slug + "/profile"} className="list-group-item">
 							<i className="fa fa-user fa-fw" aria-hidden="true"></i> Profile
 						</Link>

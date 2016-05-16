@@ -98,5 +98,5 @@ gulp.task("browserify-watch", ["browserify-vendor"], function() {
 	}
 });
 
-gulp.task("default", ["vendor", "vendor-css", "browserify-watch"]);
-gulp.task("build", ["vendor", "vendor-css", "browserify"]);
+gulp.task("default", ["vendor", "browserify-watch"]);
+gulp.task("build", ["vendor", "browserify"]);
