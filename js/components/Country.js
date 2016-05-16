@@ -47,7 +47,7 @@ class Country extends React.Component {
 		$.get("data/" + slug + "/" + part + ".html", function(content) {
 
 			// fix image paths
-			content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
+			content = content.replace("src=\"/images", "src=\"data/" + slug + "/images");
 
 			// attach external link icon to external links
 			var $c = $(content);

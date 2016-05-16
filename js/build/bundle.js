@@ -123,7 +123,7 @@ var City = (function (_React$Component) {
 			$.get("data/" + slug + "/city/" + cityslug + ".html", (function (content) {
 
 				// fix image paths
-				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
+				content = content.replace("src=\"/images", "src=\"data/" + slug + "/images");
 
 				// attach external link icon to external links
 				var $c = $(content);
@@ -324,7 +324,7 @@ var Countries = (function (_React$Component) {
 								return _react2["default"].createElement(
 									_reactRouter.Link,
 									{ key: c.slug, to: "/country/" + c.slug, className: "list-group-item" },
-									c.flag ? _react2["default"].createElement("img", { className: "flag-icon", src: "/data/" + c.slug + c.flag, width: "30", height: "20" }) : _react2["default"].createElement("img", { src: "/img/spacer.png", width: "30", height: "20" }),
+									c.flag ? _react2["default"].createElement("img", { className: "flag-icon", src: "data/" + c.slug + c.flag, width: "30", height: "20" }) : _react2["default"].createElement("img", { src: "/img/spacer.png", width: "30", height: "20" }),
 									_react2["default"].createElement(
 										"span",
 										{ className: "country-list-span" },
@@ -426,7 +426,7 @@ var Country = (function (_React$Component) {
 			$.get("data/" + slug + "/" + part + ".html", (function (content) {
 
 				// fix image paths
-				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
+				content = content.replace("src=\"/images", "src=\"data/" + slug + "/images");
 
 				// attach external link icon to external links
 				var $c = $(content);
