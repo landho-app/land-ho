@@ -56,7 +56,162 @@ var App = (function (_React$Component) {
 exports["default"] = App;
 module.exports = exports["default"];
 
-},{"./Navibar":4,"react":"react"}],2:[function(require,module,exports){
+},{"./Navibar":5,"react":"react"}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require("react-router");
+
+var City = (function (_React$Component) {
+	_inherits(City, _React$Component);
+
+	// CONSTRUCTOR
+
+	function City(props) {
+		_classCallCheck(this, City);
+
+		_get(Object.getPrototypeOf(City.prototype), "constructor", this).call(this, props);
+		this.state = {
+			"content": null
+		};
+	}
+
+	// COMPONENT DID MOUNT
+
+	_createClass(City, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+
+			var slug = this.props.params.slug;
+			var cityslug = this.props.params.cityslug;
+
+			this.loadData(slug, cityslug);
+		}
+
+		// SLUGIFY
+	}, {
+		key: "slugify",
+		value: function slugify(text) {
+			return text.toLowerCase().replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
+			.replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
+			.replace(/^-+|-+$/g, ''); // remove leading, trailing -
+		}
+
+		// LOAD DATA
+	}, {
+		key: "loadData",
+		value: function loadData(slug, cityslug) {
+			var that = this;
+
+			$.get("/data/" + slug + "/city/" + cityslug + ".html", (function (content) {
+
+				// fix image paths
+				content = content.replace("src=\"/images", "src=\"/data/" + slug + "/images");
+
+				// attach external link icon to external links
+				var $c = $(content);
+				$c.find("a").each(function (i, el) {
+
+					var href = $(this).attr("href");
+
+					console.log(href);
+
+					// mailto
+					if (href.indexOf("mailto:") !== -1) {
+						$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
+					}
+
+					// external link
+					else if (href.indexOf("noonsite.com") === -1 && href.indexOf("http") === 0) {
+							$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+							$(this).attr("target", "_blank");
+						}
+
+						// internal links
+						else if (href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) {
+
+								var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
+								var tmp_splitted = tmp.split("/");
+
+								var visited_country = false;
+								for (var j in tmp_splitted) {
+
+									if (visited_country === true) {
+										tmp_splitted[j] = that.slugify(tmp_splitted[j]);
+									}
+
+									if (tmp_splitted[j] === "country") {
+										visited_country = true;
+									}
+								}
+
+								var new_href = tmp_splitted.join("/");
+
+								// is it a city
+								if (new_href.indexOf("/country/" + slug + "/") !== -1) {
+									new_href = "#/city/" + tmp_splitted[tmp_splitted.length - 1];
+								}
+
+								$(this).attr("href", new_href);
+							}
+
+							// a relative link but not /Countries
+							else {
+
+									if (href[0] !== "/") {
+										href = "/" + href;
+									}
+
+									$(this).attr("href", "http://www.noonsite.com" + href);
+									$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+									$(this).attr("target", "_blank");
+								}
+				});
+
+				this.setState({
+					"content": $c.html()
+				});
+			}).bind(this));
+		}
+
+		// RENDER
+	}, {
+		key: "render",
+		value: function render() {
+
+			return _react2["default"].createElement(
+				"div",
+				{ className: "row" },
+				_react2["default"].createElement("div", { className: "col-md-3" }),
+				_react2["default"].createElement("div", { className: "col-md-9", dangerouslySetInnerHTML: { __html: this.state.content } })
+			);
+		}
+	}]);
+
+	return City;
+})(_react2["default"].Component);
+
+exports["default"] = City;
+module.exports = exports["default"];
+
+},{"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -191,7 +346,7 @@ var Countries = (function (_React$Component) {
 exports["default"] = Countries;
 module.exports = exports["default"];
 
-},{"react":"react","react-router":"react-router"}],3:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -255,9 +410,11 @@ var Country = (function (_React$Component) {
 	}, {
 		key: "slugify",
 		value: function slugify(text) {
-			return text.toLowerCase().replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-			.replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
-			.replace(/^-+|-+$/g, ''); // remove leading, trailing -
+			return text.toString().toLowerCase().replace(/\s+/g, '-') // Replace spaces with -
+			.replace(/[^\w\-]+/g, '') // Remove all non-word chars
+			.replace(/\-\-+/g, '-') // Replace multiple - with single -
+			.replace(/^-+/, '') // Trim - from start of text
+			.replace(/-+$/, ''); // Trim - from end of text
 		}
 
 		// LOAD DATA
@@ -276,7 +433,6 @@ var Country = (function (_React$Component) {
 				$c.find("a").each(function (i, el) {
 
 					var href = $(this).attr("href");
-
 					console.log(href);
 
 					// mailto
@@ -291,24 +447,14 @@ var Country = (function (_React$Component) {
 						}
 
 						// internal links
-						else if (href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) {
+						else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
 
 								var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
 								var tmp_splitted = tmp.split("/");
 
-								var visited_country = false;
-								for (var j in tmp_splitted) {
-
-									if (visited_country === true) {
-										tmp_splitted[j] = that.slugify(tmp_splitted[j]);
-									}
-
-									if (tmp_splitted[j] === "country") {
-										visited_country = true;
-									}
-								}
-
-								$(this).attr("href", tmp_splitted.join("/"));
+								// is it a city
+								var new_href = "#/country/" + slug + "/city/" + that.slugify($(this).text().replace("*", ""));
+								$(this).attr("href", new_href);
 							}
 
 							// a relative link but not /Countries
@@ -375,7 +521,7 @@ var Country = (function (_React$Component) {
 exports["default"] = Country;
 module.exports = exports["default"];
 
-},{"react":"react","react-router":"react-router"}],4:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -430,6 +576,11 @@ var Navibar = (function (_React$Component) {
 		key: "render",
 		value: function render() {
 
+			var linkBack = "/";
+			if ("cityslug" in this.props.params) {
+				linkBack = "/country/" + this.props.params.slug + "/profile";
+			}
+
 			return _react2["default"].createElement(
 				"div",
 				{ className: "navbar navbar-default navbar-fixed-top" },
@@ -441,7 +592,7 @@ var Navibar = (function (_React$Component) {
 						{ className: "navbar-header" },
 						"slug" in this.props.params ? _react2["default"].createElement(
 							_reactRouter.Link,
-							{ to: "/", className: "navbar-brand" },
+							{ to: linkBack, className: "navbar-brand" },
 							_react2["default"].createElement("i", { className: "fa fa-arrow-left fa-fw" })
 						) : _react2["default"].createElement(
 							_reactRouter.Link,
@@ -474,7 +625,7 @@ var Navibar = (function (_React$Component) {
 exports["default"] = Navibar;
 module.exports = exports["default"];
 
-},{"react":"react","react-router":"react-router"}],5:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],6:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -509,7 +660,7 @@ _reactDom2["default"].render(_react2["default"].createElement(
   _routes2["default"]
 ), document.getElementById("app"));
 
-},{"./routes":6,"history/lib/createHashHistory":16,"react":"react","react-dom":"react-dom","react-router":"react-router"}],6:[function(require,module,exports){
+},{"./routes":7,"history/lib/createHashHistory":17,"react":"react","react-dom":"react-dom","react-router":"react-router"}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -536,18 +687,23 @@ var _componentsCountry = require("./components/Country");
 
 var _componentsCountry2 = _interopRequireDefault(_componentsCountry);
 
+var _componentsCity = require("./components/City");
+
+var _componentsCity2 = _interopRequireDefault(_componentsCity);
+
 exports["default"] = _react2["default"].createElement(
 	_reactRouter.Route,
 	{ component: _componentsApp2["default"] },
 	_react2["default"].createElement(_reactRouter.Route, { path: "/", component: _componentsCountries2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/countries", component: _componentsCountries2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/countries/:query", component: _componentsCountries2["default"] }),
+	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug/city/:cityslug", component: _componentsCity2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug", component: _componentsCountry2["default"] }),
 	_react2["default"].createElement(_reactRouter.Route, { path: "/country/:slug/:part", component: _componentsCountry2["default"] })
 );
 module.exports = exports["default"];
 
-},{"./components/App":1,"./components/Countries":2,"./components/Country":3,"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
+},{"./components/App":1,"./components/City":2,"./components/Countries":3,"./components/Country":4,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -643,7 +799,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":8,"./lib/keys.js":9}],8:[function(require,module,exports){
+},{"./lib/is_arguments.js":9,"./lib/keys.js":10}],9:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -665,7 +821,7 @@ function unsupported(object){
     false;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -676,7 +832,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -708,7 +864,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -735,7 +891,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -806,7 +962,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":24,"warning":25}],13:[function(require,module,exports){
+},{"_process":25,"warning":26}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -887,13 +1043,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -936,7 +1092,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":13,"./ExecutionEnvironment":14,"./createHistory":17,"_process":24,"invariant":23}],16:[function(require,module,exports){
+},{"./DOMUtils":14,"./ExecutionEnvironment":15,"./createHistory":18,"_process":25,"invariant":24}],17:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1187,7 +1343,7 @@ function createHashHistory() {
 exports['default'] = createHashHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":10,"./DOMStateStorage":12,"./DOMUtils":13,"./ExecutionEnvironment":14,"./createDOMHistory":15,"./parsePath":21,"_process":24,"invariant":23,"warning":25}],17:[function(require,module,exports){
+},{"./Actions":11,"./DOMStateStorage":13,"./DOMUtils":14,"./ExecutionEnvironment":15,"./createDOMHistory":16,"./parsePath":22,"_process":25,"invariant":24,"warning":26}],18:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -1479,7 +1635,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":10,"./AsyncUtils":11,"./createLocation":18,"./deprecate":19,"./parsePath":21,"./runTransitionHook":22,"deep-equal":7}],18:[function(require,module,exports){
+},{"./Actions":11,"./AsyncUtils":12,"./createLocation":19,"./deprecate":20,"./parsePath":22,"./runTransitionHook":23,"deep-equal":8}],19:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -1534,7 +1690,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":10,"./parsePath":21}],19:[function(require,module,exports){
+},{"./Actions":11,"./parsePath":22}],20:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -1550,7 +1706,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1564,7 +1720,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1611,7 +1767,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":20,"_process":24,"warning":25}],22:[function(require,module,exports){
+},{"./extractPath":21,"_process":25,"warning":26}],23:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -1638,7 +1794,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":24,"warning":25}],23:[function(require,module,exports){
+},{"_process":25,"warning":26}],24:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -1693,7 +1849,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":24}],24:[function(require,module,exports){
+},{"_process":25}],25:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1789,7 +1945,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -1853,4 +2009,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":24}]},{},[5]);
+},{"_process":25}]},{},[6]);

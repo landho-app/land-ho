@@ -21,13 +21,18 @@ class Navibar extends React.Component {
 	// RENDER
 	render() {
 
+		var linkBack = "/";
+		if("cityslug" in this.props.params) {
+			linkBack = "/country/" + this.props.params.slug + "/profile";
+		}
+
 		return (
 			<div className="navbar navbar-default navbar-fixed-top">
 		      <div className="container">
 		        <div className="navbar-header">
 					{("slug" in this.props.params)
 					?
-					<Link to="/" className="navbar-brand">
+					<Link to={linkBack} className="navbar-brand">
 						<i className="fa fa-arrow-left fa-fw"></i>
 					</Link>
 					:

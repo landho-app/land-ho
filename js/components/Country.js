@@ -32,10 +32,12 @@ class Country extends React.Component {
 	// SLUGIFY
 	slugify(text)
 	{
-		return text.toLowerCase()
-		  .replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-		  .replace(/[\s_-]+/g, '-') // swap any length of whitespace, underscore, hyphen characters with a single -
-		  .replace(/^-+|-+$/g, ''); // remove leading, trailing -
+		return text.toString().toLowerCase()
+		    .replace(/\s+/g, '-')           // Replace spaces with -
+		    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+		    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+		    .replace(/^-+/, '')             // Trim - from start of text
+		    .replace(/-+$/, '');            // Trim - from end of text
 	}
 
 	// LOAD DATA
@@ -52,8 +54,7 @@ class Country extends React.Component {
 			$c.find("a").each(function(i, el) {
 
 				var href = $(this).attr("href");
-
-				console.log(href );
+				console.log(href);
 
 				// mailto
 				if(href.indexOf("mailto:") !== -1) {
@@ -67,24 +68,16 @@ class Country extends React.Component {
 				}
 
 				// internal links
-				else if(href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) {
+				else if((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) &&
+						(href.replace("http://", "").match(/\//g) || []).length === 3)
+				{
 
 					var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
 					var tmp_splitted = tmp.split("/");
 
-					var visited_country = false;
-					for(var j in tmp_splitted) {
-
-						if(visited_country === true) {
-							tmp_splitted[j] = that.slugify(tmp_splitted[j]);
-						}
-
-						if(tmp_splitted[j] === "country") {
-							visited_country = true;
-						}
-					}
-
-					$(this).attr("href", tmp_splitted.join("/"));
+					// is it a city
+					var new_href = "#/country/" + slug + "/city/" + that.slugify($(this).text().replace("*", ""));
+					$(this).attr("href", new_href);
 				}
 
 				// a relative link but not /Countries
