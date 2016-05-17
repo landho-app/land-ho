@@ -4,10 +4,12 @@ import App from "./components/App";
 import Countries from "./components/Countries";
 import Country from "./components/Country";
 import City from "./components/City";
+import Info from "./components/Info";
 
 export default (
 	<Route component={App}>
 		<Route path="/" component={Countries} />
+		<Route path="/info" component={Info} />
 		<Route path="/countries" component={Countries} />
 		<Route path="/countries/:query" component={Countries} />
 		<Route path="/country/:slug/city/:cityslug" component={City} />

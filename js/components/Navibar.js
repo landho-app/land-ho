@@ -30,25 +30,31 @@ class Navibar extends React.Component {
 			<div className="navbar navbar-default navbar-fixed-top">
 		      <div className="container">
 		        <div className="navbar-header">
-					{("slug" in this.props.params)
-					?
-					<Link to={linkBack} className="navbar-brand">
-						<i className="fa fa-arrow-left fa-fw"></i>
-					</Link>
+					{("slug" in this.props.params) ?
+						<Link to={linkBack} className="navbar-brand">
+							<i className="fa fa-arrow-left fa-fw"></i>
+						</Link>
 					:
 						<Link to="/" className="navbar-brand">
 							<img className="navbar-brand-img" src="img/icon.png" height="24" />
-							Land ho!
+							<span className="hidden-xs">Land ho!</span>
 	  				  	</Link>
 					}
-				  <center>
-					  <div className="navbar-form search-center" role="search">
-						  <div className="form-group">
-							<input type="text" width="200" className="form-control" placeholder="Search countries" onKeyUp={this.keyUp.bind(this)} />
-						  </div>
-					  </div>
-				  </center>
 		        </div>
+
+				<center>
+				  <div className="navbar-form search-center" role="search">
+					  <div className="form-group">
+						<input type="text" width="200" className="form-control" placeholder="Search countries" onKeyUp={this.keyUp.bind(this)} />
+					  </div>
+				  </div>
+				</center>
+
+				<p className="navbar-text navbar-right">
+					<Link to="/info" className="navbar-link info">
+						<i className="fa fa-info-circle"></i>
+					</Link>
+				</p>
 		      </div>
 		    </div>
 		);

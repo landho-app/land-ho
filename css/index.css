@@ -27,3 +27,10 @@ body {
 	width:30px;
 	height:1px;
 }
+
+.info {
+	font-size: 1.4em;
+	position: absolute;
+	margin-top: -1px;
+	color:#000!important;
+}
