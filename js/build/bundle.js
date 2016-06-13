@@ -762,13 +762,24 @@ var _routes2 = _interopRequireDefault(_routes);
 var history = (0, _historyLibCreateHashHistory2["default"])();
 
 _reactDom2["default"].render(_react2["default"].createElement(
-    _reactRouter2["default"],
-    { history: history },
-    _routes2["default"]
+	_reactRouter2["default"],
+	{ history: history },
+	_routes2["default"]
 ), document.getElementById("app"));
 
+// jquery is ready
 $(function () {
-    FastClick.attach(document.body);
+	FastClick.attach(document.body);
+});
+
+// phonegap is ready
+document.addEventListener("deviceready", function () {
+	// do status bar magic
+	if (typeof StatusBar !== 'undefined') {
+		StatusBar.styleBlackOpaque();
+		StatusBar.backgroundColorByHexString("#000");
+		StatusBar.show();
+	}
 });
 
 },{"./routes":8,"history/lib/createHashHistory":18,"react":"react","react-dom":"react-dom","react-router":"react-router"}],8:[function(require,module,exports){

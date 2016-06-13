@@ -9,6 +9,17 @@ let history = createHashHistory();
 
 ReactDOM.render(<Router history={history}>{routes}</Router>, document.getElementById("app"));
 
+// jquery is ready
 $(function() {
     FastClick.attach(document.body);
+});
+
+// phonegap is ready
+document.addEventListener("deviceready", function() {
+	// do status bar magic
+	if (typeof(StatusBar) !== 'undefined') {
+		StatusBar.styleBlackOpaque();
+		StatusBar.backgroundColorByHexString("#000");
+		StatusBar.show();
+	}
 });
