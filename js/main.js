@@ -8,3 +8,7 @@ import routes from "./routes";
 let history = createHashHistory();
 
 ReactDOM.render(<Router history={history}>{routes}</Router>, document.getElementById("app"));
+
+$(function() {
+    FastClick.attach(document.body);
+});

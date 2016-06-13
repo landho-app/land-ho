@@ -762,10 +762,14 @@ var _routes2 = _interopRequireDefault(_routes);
 var history = (0, _historyLibCreateHashHistory2["default"])();
 
 _reactDom2["default"].render(_react2["default"].createElement(
-  _reactRouter2["default"],
-  { history: history },
-  _routes2["default"]
+    _reactRouter2["default"],
+    { history: history },
+    _routes2["default"]
 ), document.getElementById("app"));
+
+$(function () {
+    FastClick.attach(document.body);
+});
 
 },{"./routes":8,"history/lib/createHashHistory":18,"react":"react","react-dom":"react-dom","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
