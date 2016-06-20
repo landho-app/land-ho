@@ -7,18 +7,6 @@ body {
 	margin-right: 15px;
 }
 
-.search-center {
-	position:absolute;
-	width:300px;
-	margin-left:-150px;
-	left:50%;
-	padding:0!important;
-}
-
-.search-center input {
-	width:300px!important;
-}
-
 .country-list-span {
 	margin-left:15px;
 }
@@ -30,7 +18,36 @@ body {
 
 .info {
 	font-size: 1.4em;
-	position: absolute;
 	margin-top: -1px;
 	color:#000!important;
+	float:right;
+}
+
+.search-center {
+	position:absolute;
+	margin-left:-30%;
+	left:50%;
+	padding:0!important;
+	width:60%;
+	padding-bottom:15px;
+}
+
+@media (min-width: 768px) {
+	.search-center {
+		margin-left:-180px;
+		width:360px;
+	}
+
+	.search-center input {
+		width:360px!important;
+	}
+}
+
+.navbar-fixed-top {
+	height:55px!important;
+}
+
+.arrow-left {
+	float:left;
+	position: absolute;
 }

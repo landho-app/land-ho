@@ -33,9 +33,14 @@ var App = (function (_React$Component) {
 	}
 
 	_createClass(App, [{
-		key: "render",
+		key: "componentWillReceiveProps",
+		value: function componentWillReceiveProps() {
+			window.previousLocation = this.props.location;
+		}
 
 		// RENDER
+	}, {
+		key: "render",
 		value: function render() {
 			return _react2["default"].createElement(
 				"div",
@@ -675,6 +680,17 @@ var Navibar = (function (_React$Component) {
 				linkBack = "/country/" + this.props.params.slug + "/profile";
 			}
 
+			// info page, return to previous location
+			if (location.hash.indexOf("#/info") >= 0) {
+				if (window.previousLocation) {
+					linkBack = window.previousLocation.pathname;
+				}
+			}
+
+			// show back button?
+			var showBackButton = location.hash.indexOf("#/info") >= 0 || "slug" in this.props.params;
+			console.log(showBackButton);
+
 			return _react2["default"].createElement(
 				"div",
 				{ className: "navbar navbar-default navbar-fixed-top" },
@@ -684,17 +700,17 @@ var Navibar = (function (_React$Component) {
 					_react2["default"].createElement(
 						"div",
 						{ className: "navbar-header" },
-						"slug" in this.props.params ? _react2["default"].createElement(
+						showBackButton === true ? _react2["default"].createElement(
 							_reactRouter.Link,
-							{ to: linkBack, className: "navbar-brand" },
+							{ to: linkBack, className: "navbar-brand arrow-left" },
 							_react2["default"].createElement("i", { className: "fa fa-arrow-left fa-fw" })
 						) : _react2["default"].createElement(
 							_reactRouter.Link,
-							{ to: "/", className: "navbar-brand" },
+							{ to: "/", className: "navbar-brand hidden-xs" },
 							_react2["default"].createElement("img", { className: "navbar-brand-img", src: "img/icon.png", height: "24" }),
 							_react2["default"].createElement(
 								"span",
-								{ className: "hidden-xs" },
+								{ className: "hidden-xs hidden-sm" },
 								"Land ho!"
 							)
 						)
@@ -708,7 +724,7 @@ var Navibar = (function (_React$Component) {
 							_react2["default"].createElement(
 								"div",
 								{ className: "form-group" },
-								_react2["default"].createElement("input", { type: "text", width: "200", className: "form-control", placeholder: "Search countries", onKeyUp: this.keyUp.bind(this) })
+								_react2["default"].createElement("input", { type: "text", className: "form-control", placeholder: "Search countries", onKeyUp: this.keyUp.bind(this) })
 							)
 						)
 					),

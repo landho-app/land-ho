@@ -26,18 +26,29 @@ class Navibar extends React.Component {
 			linkBack = "/country/" + this.props.params.slug + "/profile";
 		}
 
+		// info page, return to previous location
+		if(location.hash.indexOf("#/info") >= 0) {
+			if(window.previousLocation) {
+				linkBack = window.previousLocation.pathname;
+			}
+		}
+
+		// show back button?
+		var showBackButton = (location.hash.indexOf("#/info") >= 0 || "slug" in this.props.params);
+		console.log(showBackButton);
+
 		return (
 			<div className="navbar navbar-default navbar-fixed-top">
 		      <div className="container">
 		        <div className="navbar-header">
-					{("slug" in this.props.params) ?
-						<Link to={linkBack} className="navbar-brand">
+					{(showBackButton === true) ?
+						<Link to={linkBack} className="navbar-brand arrow-left">
 							<i className="fa fa-arrow-left fa-fw"></i>
 						</Link>
 					:
-						<Link to="/" className="navbar-brand">
+						<Link to="/" className="navbar-brand hidden-xs">
 							<img className="navbar-brand-img" src="img/icon.png" height="24" />
-							<span className="hidden-xs">Land ho!</span>
+							<span className="hidden-xs hidden-sm">Land ho!</span>
 	  				  	</Link>
 					}
 		        </div>
@@ -45,7 +56,7 @@ class Navibar extends React.Component {
 				<center>
 				  <div className="navbar-form search-center" role="search">
 					  <div className="form-group">
-						<input type="text" width="200" className="form-control" placeholder="Search countries" onKeyUp={this.keyUp.bind(this)} />
+						<input type="text" className="form-control" placeholder="Search countries" onKeyUp={this.keyUp.bind(this)} />
 					  </div>
 				  </div>
 				</center>
