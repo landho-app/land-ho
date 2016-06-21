@@ -17,11 +17,7 @@ $(function() {
 // phonegap is ready
 document.addEventListener("deviceready", function() {
 
-	// do status bar magic
-	if (typeof(StatusBar) !== 'undefined') {
-		StatusBar.overlaysWebView(false);
-		StatusBar.styleBlackOpaque();
-		StatusBar.backgroundColorByHexString("#000");
-		StatusBar.show();
-	}
+	alert("Device ready");
+	StatusBar.overlaysWebView(false);
+	StatusBar.styleBlackOpaque();
 });
