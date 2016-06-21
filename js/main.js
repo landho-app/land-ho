@@ -13,11 +13,3 @@ ReactDOM.render(<Router history={history}>{routes}</Router>, document.getElement
 $(function() {
     FastClick.attach(document.body);
 });
-
-// phonegap is ready
-document.addEventListener("deviceready", function() {
-
-	alert("Device ready");
-	StatusBar.overlaysWebView(false);
-	StatusBar.styleBlackOpaque();
-});
