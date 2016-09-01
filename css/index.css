@@ -51,3 +51,9 @@ body {
 	float:left;
 	position: absolute;
 }
+
+.hovered {
+	text-decoration: none;
+	color: #555555;
+	background-color: #f5f5f5;
+}

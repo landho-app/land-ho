@@ -23,6 +23,8 @@ class Country extends React.Component {
 	// COMPONENT WILL RECEIVE PROPS
 	componentWillReceiveProps(nextProps) {
 
+		$(".hovered").removeClass("hovered");
+
 		var part = nextProps.params.part || "profile";
 		var slug = nextProps.params.slug;
 
@@ -107,7 +109,7 @@ class Country extends React.Component {
 			<div className="row">
 				<div className="col-md-3">
 					<div className="list-group">
-						<Link to={"/country/" + this.props.params.slug + "/profile"} className="list-group-item">
+						<Link to={"/country/" + this.props.params.slug + "/profile"} className="list-group-item hovered">
 							<i className="fa fa-user fa-fw" aria-hidden="true"></i> Profile
 						</Link>
 						<Link to={"/country/" + this.props.params.slug + "/general"} className="list-group-item">
