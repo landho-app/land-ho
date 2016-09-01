@@ -102,18 +102,40 @@ class City extends React.Component {
 				"content": $c.html()
 			});
 
+		}.bind(this))
+		.fail(function() {
+			this.setState({
+				"content": -1
+			});
 		}.bind(this));
 	}
 
 	// RENDER
 	render() {
 
-		return (
-			<div className="row">
-				<div className="col-md-3"></div>
-				<div className="col-md-9" dangerouslySetInnerHTML={{__html: this.state.content}}></div>
-			</div>
-		);
+		if(this.state.content === -1) {
+			return (
+				<div className="row">
+					<div className="col-md-12">
+						<center>
+							<p><i className="fa fa-globe fa-5x" aria-hidden="true"></i></p>
+							<h3>Sorry sailor!</h3>
+							<p>The page you were looking for is not yet available offline.</p>
+							<p>Watch out for the next update of the app!</p>
+						</center>
+					</div>
+				</div>
+			);
+		}
+		else {
+			return (
+				<div className="row">
+					<div className="col-md-3"></div>
+					<div className="col-md-9" dangerouslySetInnerHTML={{__html: this.state.content}}></div>
+				</div>
+			);
+		}
+
 	}
 }
 

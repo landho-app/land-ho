@@ -63,13 +63,13 @@ class Country extends React.Component {
 				}
 
 				// external link
-				else if(href.indexOf("http") === 0) {
+				else if(href.indexOf("http") === 0 && href.indexOf("/Countries") === -1) {
 					$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
 					$(this).attr("target", "_blank");
 				}
 
 				// internal links
-				else if((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) &&
+				else if((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") >= 0) &&
 						(href.replace("http://", "").match(/\//g) || []).length === 3)
 				{
 

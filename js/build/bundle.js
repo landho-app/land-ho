@@ -193,6 +193,10 @@ var City = (function (_React$Component) {
 				this.setState({
 					"content": $c.html()
 				});
+			}).bind(this)).fail((function () {
+				this.setState({
+					"content": -1
+				});
 			}).bind(this));
 		}
 
@@ -201,12 +205,47 @@ var City = (function (_React$Component) {
 		key: "render",
 		value: function render() {
 
-			return _react2["default"].createElement(
-				"div",
-				{ className: "row" },
-				_react2["default"].createElement("div", { className: "col-md-3" }),
-				_react2["default"].createElement("div", { className: "col-md-9", dangerouslySetInnerHTML: { __html: this.state.content } })
-			);
+			if (this.state.content === -1) {
+				return _react2["default"].createElement(
+					"div",
+					{ className: "row" },
+					_react2["default"].createElement(
+						"div",
+						{ className: "col-md-12" },
+						_react2["default"].createElement(
+							"center",
+							null,
+							_react2["default"].createElement(
+								"p",
+								null,
+								_react2["default"].createElement("i", { className: "fa fa-globe fa-5x", "aria-hidden": "true" })
+							),
+							_react2["default"].createElement(
+								"h3",
+								null,
+								"Sorry sailor!"
+							),
+							_react2["default"].createElement(
+								"p",
+								null,
+								"The page you were looking for is not yet available offline."
+							),
+							_react2["default"].createElement(
+								"p",
+								null,
+								"Watch out for the next update of the app!"
+							)
+						)
+					)
+				);
+			} else {
+				return _react2["default"].createElement(
+					"div",
+					{ className: "row" },
+					_react2["default"].createElement("div", { className: "col-md-3" }),
+					_react2["default"].createElement("div", { className: "col-md-9", dangerouslySetInnerHTML: { __html: this.state.content } })
+				);
+			}
 		}
 	}]);
 
@@ -447,13 +486,13 @@ var Country = (function (_React$Component) {
 					}
 
 					// external link
-					else if (href.indexOf("http") === 0) {
+					else if (href.indexOf("http") === 0 && href.indexOf("/Countries") === -1) {
 							$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
 							$(this).attr("target", "_blank");
 						}
 
 						// internal links
-						else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
+						else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") >= 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
 
 								var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
 								var tmp_splitted = tmp.split("/");
