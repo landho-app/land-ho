@@ -440,7 +440,6 @@ var Country = (function (_React$Component) {
 				$c.find("a").each(function (i, el) {
 
 					var href = $(this).attr("href");
-					console.log(href);
 
 					// mailto
 					if (href.indexOf("mailto:") !== -1) {
@@ -448,7 +447,7 @@ var Country = (function (_React$Component) {
 					}
 
 					// external link
-					else if (href.indexOf("noonsite.com") === -1 && href.indexOf("http") === 0) {
+					else if (href.indexOf("http") === 0) {
 							$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
 							$(this).attr("target", "_blank");
 						}
