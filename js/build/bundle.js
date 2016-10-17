@@ -794,7 +794,6 @@ exports["default"] = Navibar;
 module.exports = exports["default"];
 
 },{"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
-(function (process){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -825,79 +824,142 @@ var Update = (function (_React$Component) {
 
 		_get(Object.getPrototypeOf(Update.prototype), "constructor", this).call(this, props);
 		this.state = {
-			"updateAvailable": false
+			"body": null,
+			"updateVersion": null
 		};
 	}
 
-	// COMPONENT DID MOUNT
+	// VERSION STRING TO NUMBER
 
 	_createClass(Update, [{
+		key: "versionStringToNumber",
+		value: function versionStringToNumber(v) {
+			var v = parseInt(v.replace(/\./g, ""));
+			if (v < 100) {
+				v = parseInt(v + "0");
+			}
+			return v;
+		}
+
+		// COMPONENT DID MOUNT
+	}, {
 		key: "componentDidMount",
 		value: function componentDidMount() {
-			alert(process.versions["electron"]);
+			var _this = this;
+
+			var currentVersion = "0.0.1";
+
+			//$.get("test.json", (versions) => {
+			$.get("https://api.github.com/repos/landho-app/landho-electron/releases", function (versions) {
+
+				var updateVersionData = null;
+
+				// iterate through versions
+				for (var i in versions) {
+					var version = _this.versionStringToNumber(versions[i].name);
+					if (version > _this.versionStringToNumber(currentVersion)) {
+						updateVersionData = versions[i];
+					}
+				}
+
+				// an update is available and it is not yet ignored
+				if (updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
+
+					// update the body of the modal view
+					_this.setState({
+						"body": updateVersionData.body,
+						"updateVersion": updateVersionData.name
+					});
+
+					// show the modal
+					window.setTimeout(function () {
+
+						$("#uptModal").modal("show");
+					}, 2000);
+				}
+			}).fail(function () {
+				console.debug("Updates cannot be determined becase offline.");
+			});
+		}
+
+		// ignore update
+	}, {
+		key: "ignoreUpdate",
+		value: function ignoreUpdate() {
+
+			// store the info to ignore this version
+			localStorage.setItem("ignore." + this.state.updateVersion, new Date().getTime() / 1000);
+			console.debug("ignore", this.state.updateVersion);
 		}
 
 		// RENDER
 	}, {
 		key: "render",
 		value: function render() {
-			if (this.state.updateAvailable === true) {
-				return _react2["default"].createElement(
+			return _react2["default"].createElement(
+				"div",
+				{ className: "modal fade", id: "uptModal", role: "dialog" },
+				_react2["default"].createElement(
 					"div",
-					{ className: "modal fade", tabindex: "-1", role: "dialog" },
+					{ className: "modal-dialog", role: "document" },
 					_react2["default"].createElement(
 						"div",
-						{ className: "modal-dialog", role: "document" },
+						{ className: "modal-content" },
 						_react2["default"].createElement(
 							"div",
-							{ className: "modal-content" },
+							{ className: "modal-header" },
 							_react2["default"].createElement(
-								"div",
-								{ className: "modal-header" },
+								"button",
+								{ type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
 								_react2["default"].createElement(
-									"button",
-									{ type: "button", className: "close", "data-dismiss": "modal", "aria-label": "Close" },
-									_react2["default"].createElement(
-										"span",
-										{ "aria-hidden": "true" },
-										"×"
-									)
-								),
-								_react2["default"].createElement(
-									"h4",
-									{ className: "modal-title" },
-									"Modal title"
+									"span",
+									{ "aria-hidden": "true" },
+									"×"
 								)
 							),
 							_react2["default"].createElement(
-								"div",
-								{ className: "modal-body" },
+								"h4",
+								{ className: "modal-title" },
+								_react2["default"].createElement("i", { className: "fa fa-refresh", "aria-hidden": "true" }),
+								" New update is available!"
+							)
+						),
+						_react2["default"].createElement(
+							"div",
+							{ className: "modal-body" },
+							_react2["default"].createElement("p", { dangerouslySetInnerHTML: { __html: this.state.body } }),
+							_react2["default"].createElement(
+								"center",
+								null,
 								_react2["default"].createElement(
 									"p",
 									null,
-									"One fine body…"
+									_react2["default"].createElement(
+										"a",
+										{ href: "https://landho-app.com", target: "_blank", id: "downloadUpdateBtn", className: "btn btn-primary btn-lg" },
+										_react2["default"].createElement("i", { className: "fa fa-download" }),
+										" Download here"
+									)
 								)
+							)
+						),
+						_react2["default"].createElement(
+							"div",
+							{ className: "modal-footer" },
+							_react2["default"].createElement(
+								"button",
+								{ type: "button", className: "btn btn-link", "data-dismiss": "modal" },
+								"Remind me later..."
 							),
 							_react2["default"].createElement(
-								"div",
-								{ className: "modal-footer" },
-								_react2["default"].createElement(
-									"button",
-									{ type: "button", className: "btn btn-default", "data-dismiss": "modal" },
-									"Close"
-								),
-								_react2["default"].createElement(
-									"button",
-									{ type: "button", className: "btn btn-primary" },
-									"Save changes"
-								)
+								"button",
+								{ type: "button", className: "btn btn-link", "data-dismiss": "modal", onClick: this.ignoreUpdate.bind(this) },
+								"Ignore update"
 							)
 						)
 					)
-				);
-			} else {
-				return null;
-			}
+				)
+			);
 		}
 	}]);
 
@@ -907,8 +969,7 @@ var Update = (function (_React$Component) {
 exports["default"] = Update;
 module.exports = exports["default"];
 
-}).call(this,require('_process'))
-},{"_process":27,"react":"react"}],8:[function(require,module,exports){
+},{"react":"react"}],8:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }

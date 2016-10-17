@@ -6,7 +6,7 @@ class App extends React.Component {
 
 	componentWillReceiveProps() {
 	    window.previousLocation = this.props.location;
-	  }
+	}
 
 	// RENDER
 	render() {
