@@ -23,9 +23,15 @@ class Update extends React.Component {
 	// COMPONENT DID MOUNT
 	componentDidMount() {
 
-		var currentVersion = "0.0.1"
+		console.log(window.appVersion);
 
-		//$.get("test.json", (versions) => {
+		// check if this is run on electron
+		if(!window.appVersion) {
+			return;
+		}
+
+		var currentVersion = "0.0.1" // window.appVersion;
+
 		$.get("https://api.github.com/repos/landho-app/landho-electron/releases", (versions) => {
 
 			var updateVersionData = null;
@@ -39,7 +45,7 @@ class Update extends React.Component {
 			}
 
 			// an update is available and it is not yet ignored
-			if(updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
+			if(updateVersionData /*&& !localStorage.getItem("ignore." + updateVersionData.name)*/) {
 
 				// update the body of the modal view
 				this.setState({
@@ -84,7 +90,7 @@ class Update extends React.Component {
 					<center>
 						<p>
 							<a href="https://landho-app.com" target="_blank" id="downloadUpdateBtn" className="btn btn-primary btn-lg">
-								<i className="fa fa-download"></i> Download here
+								<i className="fa fa-download"></i> Download now!
 							</a>
 						</p>
 					</center>

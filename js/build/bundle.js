@@ -847,9 +847,15 @@ var Update = (function (_React$Component) {
 		value: function componentDidMount() {
 			var _this = this;
 
-			var currentVersion = "0.0.1";
+			console.log(window.appVersion);
 
-			//$.get("test.json", (versions) => {
+			// check if this is run on electron
+			if (!window.appVersion) {
+				return;
+			}
+
+			var currentVersion = "0.0.1"; // window.appVersion;
+
 			$.get("https://api.github.com/repos/landho-app/landho-electron/releases", function (versions) {
 
 				var updateVersionData = null;
@@ -863,20 +869,20 @@ var Update = (function (_React$Component) {
 				}
 
 				// an update is available and it is not yet ignored
-				if (updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
+				if (updateVersionData /*&& !localStorage.getItem("ignore." + updateVersionData.name)*/) {
 
-					// update the body of the modal view
-					_this.setState({
-						"body": updateVersionData.body,
-						"updateVersion": updateVersionData.name
-					});
+						// update the body of the modal view
+						_this.setState({
+							"body": updateVersionData.body,
+							"updateVersion": updateVersionData.name
+						});
 
-					// show the modal
-					window.setTimeout(function () {
+						// show the modal
+						window.setTimeout(function () {
 
-						$("#uptModal").modal("show");
-					}, 2000);
-				}
+							$("#uptModal").modal("show");
+						}, 2000);
+					}
 			}).fail(function () {
 				console.debug("Updates cannot be determined becase offline.");
 			});
@@ -938,7 +944,7 @@ var Update = (function (_React$Component) {
 										"a",
 										{ href: "https://landho-app.com", target: "_blank", id: "downloadUpdateBtn", className: "btn btn-primary btn-lg" },
 										_react2["default"].createElement("i", { className: "fa fa-download" }),
-										" Download here"
+										" Download now!"
 									)
 								)
 							)
@@ -996,18 +1002,36 @@ var _routes = require("./routes");
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var history = (0, _historyLibCreateHashHistory2["default"])();
+// jquery is ready
+$(function () {
+    FastClick.attach(document.body);
+});
 
+// parse the url query string
+var parseQueryString = function parseQueryString() {
+
+    var str = window.location.search;
+    var objURL = {};
+
+    str.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function ($0, $1, $2, $3) {
+        objURL[$1] = $3;
+    });
+    return objURL;
+};
+
+// check if electron version params are available
+var params = parseQueryString();
+if ("version" in params) {
+    window.appVersion = params["version"];
+}
+
+// start react router
+var history = (0, _historyLibCreateHashHistory2["default"])();
 _reactDom2["default"].render(_react2["default"].createElement(
     _reactRouter2["default"],
     { history: history },
     _routes2["default"]
 ), document.getElementById("app"));
-
-// jquery is ready
-$(function () {
-    FastClick.attach(document.body);
-});
 
 },{"./routes":9,"history/lib/createHashHistory":19,"react":"react","react-dom":"react-dom","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";

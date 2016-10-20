@@ -30,8 +30,8 @@ var dependencies = [
 gulp.task("vendor", function() {
 	return gulp.src([
 			"bower_components/jquery/dist/jquery.js",
-			"bower_components/bootstrap/dist/js/bootstrap.js",
-			"bower_components/fastclick/lib/fastclick.js"
+			"bower_components/fastclick/lib/fastclick.js",
+			"bower_components/bootstrap/dist/js/bootstrap.js"
 		])
 		.pipe(concat("vendor.js"))
 		.pipe(gulpif(production, uglify({
