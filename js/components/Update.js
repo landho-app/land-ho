@@ -30,7 +30,7 @@ class Update extends React.Component {
 			return;
 		}
 
-		var currentVersion = "0.0.1" // window.appVersion;
+		var currentVersion = window.appVersion;
 
 		$.get("https://api.github.com/repos/landho-app/landho-electron/releases", (versions) => {
 
@@ -45,7 +45,7 @@ class Update extends React.Component {
 			}
 
 			// an update is available and it is not yet ignored
-			if(updateVersionData /*&& !localStorage.getItem("ignore." + updateVersionData.name)*/) {
+			if(updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
 
 				// update the body of the modal view
 				this.setState({

@@ -854,7 +854,7 @@ var Update = (function (_React$Component) {
 				return;
 			}
 
-			var currentVersion = "0.0.1"; // window.appVersion;
+			var currentVersion = window.appVersion;
 
 			$.get("https://api.github.com/repos/landho-app/landho-electron/releases", function (versions) {
 
@@ -869,20 +869,20 @@ var Update = (function (_React$Component) {
 				}
 
 				// an update is available and it is not yet ignored
-				if (updateVersionData /*&& !localStorage.getItem("ignore." + updateVersionData.name)*/) {
+				if (updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
 
-						// update the body of the modal view
-						_this.setState({
-							"body": updateVersionData.body,
-							"updateVersion": updateVersionData.name
-						});
+					// update the body of the modal view
+					_this.setState({
+						"body": updateVersionData.body,
+						"updateVersion": updateVersionData.name
+					});
 
-						// show the modal
-						window.setTimeout(function () {
+					// show the modal
+					window.setTimeout(function () {
 
-							$("#uptModal").modal("show");
-						}, 2000);
-					}
+						$("#uptModal").modal("show");
+					}, 2000);
+				}
 			}).fail(function () {
 				console.debug("Updates cannot be determined becase offline.");
 			});
