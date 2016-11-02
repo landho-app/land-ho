@@ -23,8 +23,6 @@ class Update extends React.Component {
 	// COMPONENT DID MOUNT
 	componentDidMount() {
 
-		console.log(window.appVersion);
-
 		// check if this is run on electron
 		if(!window.appVersion) {
 			return;

@@ -847,8 +847,6 @@ var Update = (function (_React$Component) {
 		value: function componentDidMount() {
 			var _this = this;
 
-			console.log(window.appVersion);
-
 			// check if this is run on electron
 			if (!window.appVersion) {
 				return;
