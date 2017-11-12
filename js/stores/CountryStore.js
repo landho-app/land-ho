@@ -1,9 +1,16 @@
 import alt from "../alt";
 import CountryActions from "../actions/CountryActions";
 
-const prepareContent = content => {
+const prepareContent = result => {
+	var content = result.section;
+
 	// fix image paths
-	content = content.replace('src="/images', 'src="data/' + slug + "/images");
+	result._attachments.forEach(att => {
+		content = content.replace(
+			'src="/images',
+			'src="data/' + slug + "/images"
+		);
+	});
 
 	return content;
 };
@@ -16,7 +23,7 @@ class CountryStore {
 	}
 
 	getProfileSuccess(result) {
-		this.content = prepareContent(result.section);
+		this.content = prepareContent(result);
 		this.updated = result.updated;
 	}
 

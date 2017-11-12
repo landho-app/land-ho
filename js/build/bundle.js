@@ -1375,9 +1375,13 @@ var _actionsCountryActions = require("../actions/CountryActions");
 
 var _actionsCountryActions2 = _interopRequireDefault(_actionsCountryActions);
 
-var prepareContent = function prepareContent(content) {
+var prepareContent = function prepareContent(result) {
+	var content = result.section;
+
 	// fix image paths
-	content = content.replace('src="/images', 'src="data/' + slug + "/images");
+	result._attachments.forEach(function (att) {
+		content = content.replace('src="/images', 'src="data/' + slug + "/images");
+	});
 
 	return content;
 };
@@ -1394,7 +1398,7 @@ var CountryStore = (function () {
 	_createClass(CountryStore, [{
 		key: "getProfileSuccess",
 		value: function getProfileSuccess(result) {
-			this.content = prepareContent(result.section);
+			this.content = prepareContent(result);
 			this.updated = result.updated;
 		}
 	}, {
