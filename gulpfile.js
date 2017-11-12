@@ -1,20 +1,13 @@
-var gulp = require("gulp");
-var gutil = require("gulp-util");
-var gulpif = require("gulp-if");
-var streamify = require("gulp-streamify");
-var autoprefixer = require("gulp-autoprefixer");
-var less = require("gulp-less");
-var concat = require("gulp-concat");
-var plumber = require("gulp-plumber");
-var source = require("vinyl-source-stream");
-var babelify = require("babelify");
-var browserify = require("browserify");
-var watchify = require("watchify");
-var uglify = require("gulp-uglify");
+const gulp = require("gulp");
+const gutil = require("gulp-util");
+const concat = require("gulp-concat");
+const source = require("vinyl-source-stream");
+const babelify = require("babelify");
+const browserify = require("browserify");
+const watchify = require("watchify");
+const sourcemaps = require("gulp-sourcemaps");
 
-var production = process.env.NODE_ENV === "production";
-
-var dependencies = [
+const dependencies = [
 	"alt",
 	"react",
 	"react-dom",
@@ -28,15 +21,13 @@ var dependencies = [
  |--------------------------------------------------------------------------
  */
 gulp.task("vendor", function() {
-	return gulp.src([
+	return gulp
+		.src([
 			"bower_components/jquery/dist/jquery.js",
 			"bower_components/fastclick/lib/fastclick.js",
 			"bower_components/bootstrap/dist/js/bootstrap.js"
 		])
 		.pipe(concat("vendor.js"))
-		.pipe(gulpif(production, uglify({
-			mangle: false
-		})))
 		.pipe(gulp.dest("js/build"));
 });
 
@@ -50,9 +41,6 @@ gulp.task("browserify-vendor", function() {
 		.require(dependencies)
 		.bundle()
 		.pipe(source("vendor.bundle.js"))
-		.pipe(gulpif(production, streamify(uglify({
-			mangle: false
-		}))))
 		.pipe(gulp.dest("js/build"));
 });
 
@@ -67,9 +55,6 @@ gulp.task("browserify", ["browserify-vendor"], function() {
 		.transform(babelify)
 		.bundle()
 		.pipe(source("bundle.js"))
-		.pipe(gulpif(production, streamify(uglify({
-			mangle: false
-		}))))
 		.pipe(gulp.dest("js/build"));
 });
 
@@ -87,12 +72,18 @@ gulp.task("browserify-watch", ["browserify-vendor"], function() {
 
 	function rebundle() {
 		var start = Date.now();
-		return bundler.bundle()
+		return bundler
+			.bundle()
 			.on("error", function(err) {
 				gutil.log(gutil.colors.red(err.toString()));
 			})
 			.on("end", function() {
-				gutil.log(gutil.colors.green("Finished rebundling JS in", (Date.now() - start) + "ms."));
+				gutil.log(
+					gutil.colors.green(
+						"Finished rebundling JS in",
+						Date.now() - start + "ms."
+					)
+				);
 			})
 			.pipe(source("bundle.js"))
 			.pipe(gulp.dest("js/build"));

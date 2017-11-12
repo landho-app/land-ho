@@ -3,9 +3,8 @@ import Navibar from "./Navibar";
 import Update from "./Update";
 
 class App extends React.Component {
-
 	componentWillReceiveProps() {
-	    window.previousLocation = this.props.location;
+		window.previousLocation = this.props.location;
 	}
 
 	// RENDER
@@ -13,10 +12,11 @@ class App extends React.Component {
 		return (
 			<div>
 				<Update />
-				<Navibar history={this.props.history} params={this.props.params} />
-				<div className="container">
-					{this.props.children}
-				</div>
+				<Navibar
+					history={this.props.history}
+					params={this.props.params}
+				/>
+				<div className="container">{this.props.children}</div>
 			</div>
 		);
 	}
