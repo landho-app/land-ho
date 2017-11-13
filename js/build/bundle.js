@@ -1,6 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
+module.exports = {
+	pouchDBUrl: "https://admin:KCCNK4yqCeFfX9B2@db.landho-app.com"
+};
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
@@ -15,38 +22,52 @@ var _alt = require("../alt");
 
 var _alt2 = _interopRequireDefault(_alt);
 
-var _config = require("./_config");
+var CityActions = (function () {
+	function CityActions() {
+		_classCallCheck(this, CityActions);
 
-var _config2 = _interopRequireDefault(_config);
+		this.generateActions("getCitySuccess", "getCityFail");
+	}
 
-var _pouchdb = require("pouchdb");
+	// GET CITY
 
-var _pouchdb2 = _interopRequireDefault(_pouchdb);
+	_createClass(CityActions, [{
+		key: "getCity",
+		value: function getCity(id) {
+			window.db["cities"].get(id, {
+				attachments: true
+			}).then(this.actions.getCitySuccess)["catch"](this.actions.getCityFail);
+		}
+	}]);
+
+	return CityActions;
+})();
+
+exports["default"] = _alt2["default"].createActions(CityActions);
+module.exports = exports["default"];
+
+},{"../alt":5}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _alt = require("../alt");
+
+var _alt2 = _interopRequireDefault(_alt);
 
 var CountriesActions = (function () {
 	function CountriesActions() {
 		_classCallCheck(this, CountriesActions);
 
 		this.generateActions("getCountriesSuccess", "getCountriesFail");
-
-		if (!window.db) window.db = {};
-		window.db["countries"] = new _pouchdb2["default"]("countries");
-
-		// enable replication
-		window.db["countries"].sync(new _pouchdb2["default"](_config2["default"].pouchDBUrl + "/countries"), {
-			live: true,
-			retry: true
-		}).on("change", function () {
-			console.info("/countries DB changed");
-		}).on("paused", function (info) {
-			console.info("/countries DB sync paused");
-		}).on("active", function (info) {
-			console.info("/countries DB sync resumed");
-		}).on("complete", function (info) {
-			console.info("/profiles DB sync completed");
-		}).on("error", function (err) {
-			console.error(err);
-		});
 	}
 
 	// GET COUNTRIES
@@ -67,7 +88,7 @@ var CountriesActions = (function () {
 exports["default"] = _alt2["default"].createActions(CountriesActions);
 module.exports = exports["default"];
 
-},{"../alt":4,"./_config":3,"pouchdb":37}],2:[function(require,module,exports){
+},{"../alt":5}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -84,46 +105,21 @@ var _alt = require("../alt");
 
 var _alt2 = _interopRequireDefault(_alt);
 
-var _config = require("./_config");
-
-var _config2 = _interopRequireDefault(_config);
-
-var _pouchdb = require("pouchdb");
-
-var _pouchdb2 = _interopRequireDefault(_pouchdb);
-
 var CountryActions = (function () {
 	function CountryActions() {
 		_classCallCheck(this, CountryActions);
 
-		this.generateActions("getProfileSuccess", "getProfileFail");
-
-		if (!window.db) window.db = {};
-		window.db["profiles"] = new _pouchdb2["default"]("profiles");
-
-		// enable replication
-		window.db["profiles"].sync(new _pouchdb2["default"](_config2["default"].pouchDBUrl + "/profiles"), {
-			live: true,
-			retry: true
-		}).on("change", function () {
-			console.info("/profiles DB changed");
-		}).on("paused", function (info) {
-			console.info("/profiles DB sync paused");
-		}).on("active", function (info) {
-			console.info("/profiles DB sync resumed");
-		}).on("complete", function (info) {
-			console.info("/profiles DB sync completed");
-		}).on("error", function (err) {
-			console.error(err);
-		});
+		this.generateActions("getSectionSuccess", "getSectionFail");
 	}
 
-	// GET PROFILE
+	// GET SECTION
 
 	_createClass(CountryActions, [{
-		key: "getProfile",
-		value: function getProfile(id) {
-			window.db["profiles"].get(id).then(this.actions.getProfileSuccess)["catch"](this.actions.getProfileFail);
+		key: "getSection",
+		value: function getSection(section, id) {
+			window.db[section].get(id, {
+				attachments: true
+			}).then(this.actions.getSectionSuccess)["catch"](this.actions.getSectionFail);
 		}
 	}]);
 
@@ -133,14 +129,7 @@ var CountryActions = (function () {
 exports["default"] = _alt2["default"].createActions(CountryActions);
 module.exports = exports["default"];
 
-},{"../alt":4,"./_config":3,"pouchdb":37}],3:[function(require,module,exports){
-"use strict";
-
-module.exports = {
-	pouchDBUrl: "https://admin:KCCNK4yqCeFfX9B2@db.landho-app.com"
-};
-
-},{}],4:[function(require,module,exports){
+},{"../alt":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -156,7 +145,7 @@ var _alt2 = _interopRequireDefault(_alt);
 exports["default"] = new _alt2["default"]();
 module.exports = exports["default"];
 
-},{"alt":"alt"}],5:[function(require,module,exports){
+},{"alt":"alt"}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -181,10 +170,6 @@ var _Navibar = require("./Navibar");
 
 var _Navibar2 = _interopRequireDefault(_Navibar);
 
-var _Update = require("./Update");
-
-var _Update2 = _interopRequireDefault(_Update);
-
 var App = (function (_React$Component) {
 	_inherits(App, _React$Component);
 
@@ -207,7 +192,6 @@ var App = (function (_React$Component) {
 			return _react2["default"].createElement(
 				"div",
 				null,
-				_react2["default"].createElement(_Update2["default"], null),
 				_react2["default"].createElement(_Navibar2["default"], {
 					history: this.props.history,
 					params: this.props.params
@@ -227,7 +211,7 @@ var App = (function (_React$Component) {
 exports["default"] = App;
 module.exports = exports["default"];
 
-},{"./Navibar":10,"./Update":11,"react":"react"}],6:[function(require,module,exports){
+},{"./Navibar":11,"react":"react"}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -250,21 +234,25 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require("react-router");
 
+var _actionsCityActions = require("../actions/CityActions");
+
+var _actionsCityActions2 = _interopRequireDefault(_actionsCityActions);
+
+var _storesCityStore = require("../stores/CityStore");
+
+var _storesCityStore2 = _interopRequireDefault(_storesCityStore);
+
 var City = (function (_React$Component) {
 	_inherits(City, _React$Component);
-
-	// CONSTRUCTOR
 
 	function City(props) {
 		_classCallCheck(this, City);
 
 		_get(Object.getPrototypeOf(City.prototype), "constructor", this).call(this, props);
-		this.state = {
-			content: null
-		};
-	}
 
-	// COMPONENT DID MOUNT
+		this.state = _storesCityStore2["default"].getState();
+		this.onChange = this.onChange.bind(this);
+	}
 
 	_createClass(City, [{
 		key: "componentDidMount",
@@ -272,89 +260,19 @@ var City = (function (_React$Component) {
 			var slug = this.props.params.slug;
 			var cityslug = this.props.params.cityslug;
 
-			this.loadData(slug, cityslug);
+			_storesCityStore2["default"].listen(this.onChange);
+			_actionsCityActions2["default"].getCity(slug + "-" + cityslug);
 		}
-
-		// SLUGIFY
 	}, {
-		key: "slugify",
-		value: function slugify(text) {
-			return text.toLowerCase().replace(/[^\w\s-]/g, "") // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-			.replace(/[\s_-]+/g, "-") // swap any length of whitespace, underscore, hyphen characters with a single -
-			.replace(/^-+|-+$/g, ""); // remove leading, trailing -
+		key: "componentWillUnmount",
+		value: function componentWillUnmount() {
+			_storesCityStore2["default"].unlisten(this.onChange);
 		}
-
-		// LOAD DATA
 	}, {
-		key: "loadData",
-		value: function loadData(slug, cityslug) {
-			var that = this;
-
-			$.get("data/" + slug + "/city/" + cityslug + ".html", (function (content) {
-				// fix image paths
-				content = content.replace('src="/images', 'src="data/' + slug + "/images");
-
-				// attach external link icon to external links
-				var $c = $(content);
-				$c.find("a").each(function (i, el) {
-					var href = $(this).attr("href");
-
-					console.log(href);
-
-					// mailto
-					if (href.indexOf("mailto:") !== -1) {
-						$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
-					} else if (href.indexOf("noonsite.com") === -1 && href.indexOf("http") === 0) {
-						// external link
-						$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
-						$(this).attr("target", "_blank");
-					} else if (href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") === 0) {
-						// internal links
-						var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
-						var tmp_splitted = tmp.split("/");
-
-						var visited_country = false;
-						for (var j in tmp_splitted) {
-							if (visited_country === true) {
-								tmp_splitted[j] = that.slugify(tmp_splitted[j]);
-							}
-
-							if (tmp_splitted[j] === "country") {
-								visited_country = true;
-							}
-						}
-
-						var new_href = tmp_splitted.join("/");
-
-						// is it a city
-						if (new_href.indexOf("/country/" + slug + "/") !== -1) {
-							new_href = "#/city/" + tmp_splitted[tmp_splitted.length - 1];
-						}
-
-						$(this).attr("href", new_href);
-					} else {
-						// a relative link but not /Countries
-						if (href[0] !== "/") {
-							href = "/" + href;
-						}
-
-						$(this).attr("href", "http://www.noonsite.com" + href);
-						$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
-						$(this).attr("target", "_blank");
-					}
-				});
-
-				this.setState({
-					content: $c.html()
-				});
-			}).bind(this)).fail((function () {
-				this.setState({
-					content: -1
-				});
-			}).bind(this));
+		key: "onChange",
+		value: function onChange(state) {
+			this.setState(state);
 		}
-
-		// RENDER
 	}, {
 		key: "render",
 		value: function render() {
@@ -414,7 +332,7 @@ var City = (function (_React$Component) {
 exports["default"] = City;
 module.exports = exports["default"];
 
-},{"react":"react","react-router":"react-router"}],7:[function(require,module,exports){
+},{"../actions/CityActions":2,"../stores/CityStore":15,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -508,7 +426,6 @@ var Countries = (function (_React$Component) {
 	}, {
 		key: "render",
 		value: function render() {
-			console.log(this.state.countries);
 			if (!this.state.countries) return null;
 
 			var countries = {};
@@ -575,7 +492,7 @@ var Countries = (function (_React$Component) {
 exports["default"] = Countries;
 module.exports = exports["default"];
 
-},{"../actions/CountriesActions":1,"../stores/CountriesStore":14,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"../actions/CountriesActions":3,"../stores/CountriesStore":16,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -620,11 +537,11 @@ var Country = (function (_React$Component) {
 	_createClass(Country, [{
 		key: "componentDidMount",
 		value: function componentDidMount() {
-			var part = this.props.params.part || "profile";
+			var part = this.props.params.part || "profiles";
 			var slug = this.props.params.slug;
 
 			_storesCountryStore2["default"].listen(this.onChange);
-			_actionsCountryActions2["default"].getProfile(slug);
+			_actionsCountryActions2["default"].getSection(part, slug);
 		}
 	}, {
 		key: "componentWillUnmount",
@@ -639,71 +556,23 @@ var Country = (function (_React$Component) {
 	}, {
 		key: "componentWillReceiveProps",
 		value: function componentWillReceiveProps(nextProps) {
-			$(".hovered").removeClass("hovered");
-
-			var part = nextProps.params.part || "profile";
+			var part = nextProps.params.part || "profiles";
 			var slug = nextProps.params.slug;
 
-			this.loadData(slug, part);
-		}
-	}, {
-		key: "slugify",
-		value: function slugify(text) {
-			return text.toString().toLowerCase().replace(/\s+/g, "-") // Replace spaces with -
-			.replace(/[^\w\-]+/g, "") // Remove all non-word chars
-			.replace(/\-\-+/g, "-") // Replace multiple - with single -
-			.replace(/^-+/, "") // Trim - from start of text
-			.replace(/-+$/, ""); // Trim - from end of text
-		}
-	}, {
-		key: "loadData",
-		value: function loadData(slug, part) {
-			var that = this;
-
-			$.get("data/" + slug + "/" + part + ".html", (function (content) {
-				// fix image paths
-				content = content.replace('src="/images', 'src="data/' + slug + "/images");
-
-				// attach external link icon to external links
-				var $c = $(content);
-				$c.find("a").each(function (i, el) {
-					var href = $(this).attr("href");
-
-					// mailto
-					if (href.indexOf("mailto:") !== -1) {
-						$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
-					} else if (href.indexOf("http") === 0 && href.indexOf("/Countries") === -1) {
-						// external link
-						$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
-						$(this).attr("target", "_blank");
-					} else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") >= 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
-						// internal links
-						var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
-						var tmp_splitted = tmp.split("/");
-
-						// is it a city
-						var new_href = "#/country/" + slug + "/city/" + that.slugify($(this).text().replace("*", ""));
-						$(this).attr("href", new_href);
-					} else {
-						// a relative link but not /Countries
-						if (href[0] !== "/") {
-							href = "/" + href;
-						}
-
-						$(this).attr("href", "http://www.noonsite.com" + href);
-						$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
-						$(this).attr("target", "_blank");
-					}
-				});
-
-				this.setState({
-					content: $c.html()
-				});
-			}).bind(this));
+			_actionsCountryActions2["default"].getSection(part, slug);
 		}
 	}, {
 		key: "render",
 		value: function render() {
+			var profilesClassName = "list-group-item";
+			if (this.props.params.part === "profiles") profilesClassName += " hovered";
+
+			var formalitiesClassName = "list-group-item";
+			if (this.props.params.part === "formalities") formalitiesClassName += " hovered";
+
+			var generalinfosClassName = "list-group-item";
+			if (this.props.params.part === "generalinfos") generalinfosClassName += " hovered";
+
 			return _react2["default"].createElement(
 				"div",
 				{ className: "row" },
@@ -716,8 +585,8 @@ var Country = (function (_React$Component) {
 						_react2["default"].createElement(
 							_reactRouter.Link,
 							{
-								to: "/country/" + this.props.params.slug + "/profile",
-								className: "list-group-item hovered"
+								to: "/country/" + this.props.params.slug + "/profiles",
+								className: profilesClassName
 							},
 							_react2["default"].createElement("i", {
 								className: "fa fa-user fa-fw",
@@ -729,8 +598,8 @@ var Country = (function (_React$Component) {
 						_react2["default"].createElement(
 							_reactRouter.Link,
 							{
-								to: "/country/" + this.props.params.slug + "/general",
-								className: "list-group-item"
+								to: "/country/" + this.props.params.slug + "/generalinfos",
+								className: generalinfosClassName
 							},
 							_react2["default"].createElement("i", {
 								className: "fa fa-globe fa-fw",
@@ -743,7 +612,7 @@ var Country = (function (_React$Component) {
 							_reactRouter.Link,
 							{
 								to: "/country/" + this.props.params.slug + "/formalities",
-								className: "list-group-item"
+								className: formalitiesClassName
 							},
 							_react2["default"].createElement("i", {
 								className: "fa fa-book fa-fw",
@@ -768,7 +637,7 @@ var Country = (function (_React$Component) {
 exports["default"] = Country;
 module.exports = exports["default"];
 
-},{"../actions/CountryActions":2,"../stores/CountryStore":15,"react":"react","react-router":"react-router"}],9:[function(require,module,exports){
+},{"../actions/CountryActions":4,"../stores/CountryStore":17,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -862,7 +731,7 @@ var Info = (function (_React$Component) {
 exports["default"] = Info;
 module.exports = exports["default"];
 
-},{"react":"react"}],10:[function(require,module,exports){
+},{"react":"react"}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -916,7 +785,7 @@ var Navibar = (function (_React$Component) {
 		value: function render() {
 			var linkBack = "/";
 			if ("cityslug" in this.props.params) {
-				linkBack = "/country/" + this.props.params.slug + "/profile";
+				linkBack = "/country/" + this.props.params.slug + "/profiles";
 			}
 
 			// info page, return to previous location
@@ -928,7 +797,6 @@ var Navibar = (function (_React$Component) {
 
 			// show back button?
 			var showBackButton = location.hash.indexOf("#/info") >= 0 || "slug" in this.props.params;
-			console.log(showBackButton);
 
 			return _react2["default"].createElement(
 				"div",
@@ -1002,214 +870,49 @@ var Navibar = (function (_React$Component) {
 exports["default"] = Navibar;
 module.exports = exports["default"];
 
-},{"react":"react","react-router":"react-router"}],11:[function(require,module,exports){
+},{"react":"react","react-router":"react-router"}],12:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _pouchdb = require("pouchdb");
+
+var _pouchdb2 = _interopRequireDefault(_pouchdb);
+
+var _config = require("./_config");
+
+var _config2 = _interopRequireDefault(_config);
+
+if (!window.db) window.db = {};
+
+["countries", "profiles", "generalinfos", "formalities", "cities"].forEach(function (database) {
+	window.db[database] = new _pouchdb2["default"](database);
+
+	// enable replication
+	window.db[database].sync(new _pouchdb2["default"](_config2["default"].pouchDBUrl + "/" + database), {
+		live: true,
+		retry: true
+	}).on("change", function () {
+		console.info("DB changed");
+	}).on("paused", function (info) {
+		console.info("DB sync paused");
+	}).on("active", function (info) {
+		console.info("DB sync resumed");
+	}).on("complete", function (info) {
+		console.info("DB sync completed");
+	}).on("error", function (err) {
+		console.error(err);
+	});
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _react = require("react");
-
-var _react2 = _interopRequireDefault(_react);
-
-var Update = (function (_React$Component) {
-	_inherits(Update, _React$Component);
-
-	// CONSTRUCTOR
-
-	function Update(props) {
-		_classCallCheck(this, Update);
-
-		_get(Object.getPrototypeOf(Update.prototype), "constructor", this).call(this, props);
-		this.state = {
-			body: null,
-			updateVersion: null
-		};
-	}
-
-	// VERSION STRING TO NUMBER
-
-	_createClass(Update, [{
-		key: "versionStringToNumber",
-		value: function versionStringToNumber(v) {
-			var v = parseInt(v.replace(/\./g, ""));
-			if (v < 100) {
-				v = parseInt(v + "0");
-			}
-			return v;
-		}
-
-		// COMPONENT DID MOUNT
-	}, {
-		key: "componentDidMount",
-		value: function componentDidMount() {
-			var _this = this;
-
-			// check if this is run on electron
-			if (!window.appVersion) {
-				return;
-			}
-
-			var currentVersion = window.appVersion;
-
-			$.get("https://api.github.com/repos/landho-app/landho-electron/releases", function (versions) {
-				var updateVersionData = null;
-
-				// iterate through versions
-				for (var i in versions) {
-					var version = _this.versionStringToNumber(versions[i].name);
-					if (version > _this.versionStringToNumber(currentVersion)) {
-						updateVersionData = versions[i];
-					}
-				}
-
-				// an update is available and it is not yet ignored
-				if (updateVersionData && !localStorage.getItem("ignore." + updateVersionData.name)) {
-					// update the body of the modal view
-					_this.setState({
-						body: updateVersionData.body,
-						updateVersion: updateVersionData.name
-					});
-
-					// show the modal
-					window.setTimeout(function () {
-						$("#uptModal").modal("show");
-					}, 2000);
-				}
-			}).fail(function () {
-				console.debug("Updates cannot be determined becase offline.");
-			});
-		}
-
-		// ignore update
-	}, {
-		key: "ignoreUpdate",
-		value: function ignoreUpdate() {
-			// store the info to ignore this version
-			localStorage.setItem("ignore." + this.state.updateVersion, new Date().getTime() / 1000);
-			console.debug("ignore", this.state.updateVersion);
-		}
-
-		// RENDER
-	}, {
-		key: "render",
-		value: function render() {
-			return _react2["default"].createElement(
-				"div",
-				{ className: "modal fade", id: "uptModal", role: "dialog" },
-				_react2["default"].createElement(
-					"div",
-					{ className: "modal-dialog", role: "document" },
-					_react2["default"].createElement(
-						"div",
-						{ className: "modal-content" },
-						_react2["default"].createElement(
-							"div",
-							{ className: "modal-header" },
-							_react2["default"].createElement(
-								"button",
-								{
-									type: "button",
-									className: "close",
-									"data-dismiss": "modal",
-									"aria-label": "Close"
-								},
-								_react2["default"].createElement(
-									"span",
-									{ "aria-hidden": "true" },
-									"×"
-								)
-							),
-							_react2["default"].createElement(
-								"h4",
-								{ className: "modal-title" },
-								_react2["default"].createElement("i", {
-									className: "fa fa-refresh",
-									"aria-hidden": "true"
-								}),
-								" ",
-								"New update is available!"
-							)
-						),
-						_react2["default"].createElement(
-							"div",
-							{ className: "modal-body" },
-							_react2["default"].createElement("p", {
-								dangerouslySetInnerHTML: {
-									__html: this.state.body
-								}
-							}),
-							_react2["default"].createElement(
-								"center",
-								null,
-								_react2["default"].createElement(
-									"p",
-									null,
-									_react2["default"].createElement(
-										"a",
-										{
-											href: "https://landho-app.com",
-											target: "_blank",
-											id: "downloadUpdateBtn",
-											className: "btn btn-primary btn-lg"
-										},
-										_react2["default"].createElement("i", { className: "fa fa-download" }),
-										" ",
-										"Download now!"
-									)
-								)
-							)
-						),
-						_react2["default"].createElement(
-							"div",
-							{ className: "modal-footer" },
-							_react2["default"].createElement(
-								"button",
-								{
-									type: "button",
-									className: "btn btn-link",
-									"data-dismiss": "modal"
-								},
-								"Remind me later..."
-							),
-							_react2["default"].createElement(
-								"button",
-								{
-									type: "button",
-									className: "btn btn-link",
-									"data-dismiss": "modal",
-									onClick: this.ignoreUpdate.bind(this)
-								},
-								"Ignore update"
-							)
-						)
-					)
-				)
-			);
-		}
-	}]);
-
-	return Update;
-})(_react2["default"].Component);
-
-exports["default"] = Update;
-module.exports = exports["default"];
-
-},{"react":"react"}],12:[function(require,module,exports){
+},{"./_config":1,"pouchdb":39}],13:[function(require,module,exports){
 "use strict";
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _db = require("./db");
+
+var _db2 = _interopRequireDefault(_db);
 
 var _react = require("react");
 
@@ -1255,7 +958,7 @@ _reactDom2["default"].render(_react2["default"].createElement(
 	_routes2["default"]
 ), document.getElementById("app"));
 
-},{"./routes":13,"history/lib/createHashHistory":27,"react":"react","react-dom":"react-dom","react-router":"react-router"}],13:[function(require,module,exports){
+},{"./db":12,"./routes":14,"history/lib/createHashHistory":29,"react":"react","react-dom":"react-dom","react-router":"react-router"}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1303,7 +1006,112 @@ exports["default"] = _react2["default"].createElement(
 );
 module.exports = exports["default"];
 
-},{"./components/App":5,"./components/City":6,"./components/Countries":7,"./components/Country":8,"./components/Info":9,"react":"react","react-router":"react-router"}],14:[function(require,module,exports){
+},{"./components/App":6,"./components/City":7,"./components/Countries":8,"./components/Country":9,"./components/Info":10,"react":"react","react-router":"react-router"}],15:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _alt = require("../alt");
+
+var _alt2 = _interopRequireDefault(_alt);
+
+var _actionsCityActions = require("../actions/CityActions");
+
+var _actionsCityActions2 = _interopRequireDefault(_actionsCityActions);
+
+var slugify = function slugify(text) {
+	return text.toString().toLowerCase().replace(/\s+/g, "-") // Replace spaces with -
+	.replace(/[^\w\-]+/g, "") // Remove all non-word chars
+	.replace(/\-\-+/g, "-") // Replace multiple - with single -
+	.replace(/^-+/, "") // Trim - from start of text
+	.replace(/-+$/, ""); // Trim - from end of text
+};
+
+var prepareContent = function prepareContent(result) {
+	var content = result.city;
+
+	// fix image paths
+	for (var key in result._attachments) {
+		if (result._attachments.hasOwnProperty(key)) {
+			var att = result._attachments[key];
+
+			// replace key placeholder with image data
+			content = content.replace(key, "data:" + att.content_type + ";base64," + att.data);
+		}
+	}
+
+	// attach external link icon to external links
+	var $c = $(content);
+	$c.find("a").each(function (i, el) {
+		var href = $(this).attr("href");
+
+		// mailto
+		if (href.indexOf("mailto:") !== -1) {
+			$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
+		} else if (href.indexOf("http") === 0 && href.indexOf("/Countries") === -1) {
+			// external link
+			$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+			$(this).attr("target", "_blank");
+		} else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") >= 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
+			// internal links
+			var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
+			var tmp_splitted = tmp.split("/");
+
+			// is it a city
+			var new_href = "#/country/" + result._id + "/city/" + slugify($(this).text().replace("*", ""));
+			$(this).attr("href", new_href);
+		} else {
+			// a relative link but not /Countries
+			if (href[0] !== "/") {
+				href = "/" + href;
+			}
+
+			$(this).attr("href", "http://www.noonsite.com" + href);
+			$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+			$(this).attr("target", "_blank");
+		}
+	});
+
+	return $c.html();
+};
+
+var CityStore = (function () {
+	function CityStore() {
+		_classCallCheck(this, CityStore);
+
+		this.bindActions(_actionsCityActions2["default"]);
+		this.content = null;
+		this.updated = null;
+	}
+
+	_createClass(CityStore, [{
+		key: "getCitySuccess",
+		value: function getCitySuccess(result) {
+			this.content = prepareContent(result);
+			this.updated = result.updated;
+		}
+	}, {
+		key: "getCityFail",
+		value: function getCityFail(err) {
+			throw err;
+		}
+	}]);
+
+	return CityStore;
+})();
+
+exports["default"] = _alt2["default"].createStore(CityStore);
+module.exports = exports["default"];
+
+},{"../actions/CityActions":2,"../alt":5}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1354,7 +1162,7 @@ var CountriesStore = (function () {
 exports["default"] = _alt2["default"].createStore(CountriesStore);
 module.exports = exports["default"];
 
-},{"../actions/CountriesActions":1,"../alt":4}],15:[function(require,module,exports){
+},{"../actions/CountriesActions":3,"../alt":5}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1375,15 +1183,60 @@ var _actionsCountryActions = require("../actions/CountryActions");
 
 var _actionsCountryActions2 = _interopRequireDefault(_actionsCountryActions);
 
+var slugify = function slugify(text) {
+	return text.toString().toLowerCase().replace(/\s+/g, "-") // Replace spaces with -
+	.replace(/[^\w\-]+/g, "") // Remove all non-word chars
+	.replace(/\-\-+/g, "-") // Replace multiple - with single -
+	.replace(/^-+/, "") // Trim - from start of text
+	.replace(/-+$/, ""); // Trim - from end of text
+};
+
 var prepareContent = function prepareContent(result) {
 	var content = result.section;
 
 	// fix image paths
-	result._attachments.forEach(function (att) {
-		content = content.replace('src="/images', 'src="data/' + slug + "/images");
+	for (var key in result._attachments) {
+		if (result._attachments.hasOwnProperty(key)) {
+			var att = result._attachments[key];
+
+			// replace key placeholder with image data
+			content = content.replace(key, "data:" + att.content_type + ";base64," + att.data);
+		}
+	}
+
+	// attach external link icon to external links
+	var $c = $(content);
+	$c.find("a").each(function (i, el) {
+		var href = $(this).attr("href");
+
+		// mailto
+		if (href.indexOf("mailto:") !== -1) {
+			$(this).html("<i class='fa fa-envelope'></i> " + $(this).html());
+		} else if (href.indexOf("http") === 0 && href.indexOf("/Countries") === -1) {
+			// external link
+			$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+			$(this).attr("target", "_blank");
+		} else if ((href.indexOf("noonsite.com/Countries") !== -1 || href.indexOf("/Countries") >= 0) && (href.replace("http://", "").match(/\//g) || []).length === 3) {
+			// internal links
+			var tmp = href.replace("http://www.noonsite.com", "").replace("/Countries", "#/country");
+			var tmp_splitted = tmp.split("/");
+
+			// is it a city
+			var new_href = "#/country/" + result._id + "/city/" + slugify($(this).text().replace("*", ""));
+			$(this).attr("href", new_href);
+		} else {
+			// a relative link but not /Countries
+			if (href[0] !== "/") {
+				href = "/" + href;
+			}
+
+			$(this).attr("href", "http://www.noonsite.com" + href);
+			$(this).html("<i class='fa fa-external-link'></i> " + $(this).html());
+			$(this).attr("target", "_blank");
+		}
 	});
 
-	return content;
+	return $c.html();
 };
 
 var CountryStore = (function () {
@@ -1396,17 +1249,15 @@ var CountryStore = (function () {
 	}
 
 	_createClass(CountryStore, [{
-		key: "getProfileSuccess",
-		value: function getProfileSuccess(result) {
+		key: "getSectionSuccess",
+		value: function getSectionSuccess(result) {
 			this.content = prepareContent(result);
 			this.updated = result.updated;
 		}
 	}, {
-		key: "getProfileFail",
-		value: function getProfileFail(err) {
+		key: "getSectionFail",
+		value: function getSectionFail(err) {
 			throw err;
-
-			//dialog.showErrorBox("Could not load logs!", "Please try again.");
 		}
 	}]);
 
@@ -1416,7 +1267,7 @@ var CountryStore = (function () {
 exports["default"] = _alt2["default"].createStore(CountryStore);
 module.exports = exports["default"];
 
-},{"../actions/CountryActions":2,"../alt":4}],16:[function(require,module,exports){
+},{"../actions/CountryActions":4,"../alt":5}],18:[function(require,module,exports){
 'use strict';
 
 module.exports = argsArray;
@@ -1436,7 +1287,7 @@ function argsArray(fun) {
     }
   };
 }
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -1532,7 +1383,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":18,"./lib/keys.js":19}],18:[function(require,module,exports){
+},{"./lib/is_arguments.js":20,"./lib/keys.js":21}],20:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -1554,7 +1405,7 @@ function unsupported(object){
     false;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -1565,7 +1416,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -1868,7 +1719,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -1900,7 +1751,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1927,7 +1778,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -1998,7 +1849,7 @@ function readState(key) {
   return null;
 }
 }).call(this,require('_process'))
-},{"_process":47,"warning":50}],24:[function(require,module,exports){
+},{"_process":49,"warning":52}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2079,13 +1930,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2128,7 +1979,7 @@ function createDOMHistory(options) {
 exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./DOMUtils":24,"./ExecutionEnvironment":25,"./createHistory":28,"_process":47,"invariant":35}],27:[function(require,module,exports){
+},{"./DOMUtils":26,"./ExecutionEnvironment":27,"./createHistory":30,"_process":49,"invariant":37}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2379,7 +2230,7 @@ function createHashHistory() {
 exports['default'] = createHashHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":21,"./DOMStateStorage":23,"./DOMUtils":24,"./ExecutionEnvironment":25,"./createDOMHistory":26,"./parsePath":32,"_process":47,"invariant":35,"warning":50}],28:[function(require,module,exports){
+},{"./Actions":23,"./DOMStateStorage":25,"./DOMUtils":26,"./ExecutionEnvironment":27,"./createDOMHistory":28,"./parsePath":34,"_process":49,"invariant":37,"warning":52}],30:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -2671,7 +2522,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":21,"./AsyncUtils":22,"./createLocation":29,"./deprecate":30,"./parsePath":32,"./runTransitionHook":33,"deep-equal":17}],29:[function(require,module,exports){
+},{"./Actions":23,"./AsyncUtils":24,"./createLocation":31,"./deprecate":32,"./parsePath":34,"./runTransitionHook":35,"deep-equal":19}],31:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -2726,7 +2577,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":21,"./parsePath":32}],30:[function(require,module,exports){
+},{"./Actions":23,"./parsePath":34}],32:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -2742,7 +2593,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -2756,7 +2607,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2803,7 +2654,7 @@ function parsePath(path) {
 exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./extractPath":31,"_process":47,"warning":50}],33:[function(require,module,exports){
+},{"./extractPath":33,"_process":49,"warning":52}],35:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2830,7 +2681,7 @@ function runTransitionHook(hook, location, callback) {
 exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"_process":47,"warning":50}],34:[function(require,module,exports){
+},{"_process":49,"warning":52}],36:[function(require,module,exports){
 (function (global){
 'use strict';
 var Mutation = global.MutationObserver || global.WebKitMutationObserver;
@@ -2903,7 +2754,7 @@ function immediate(task) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -2958,7 +2809,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":47}],36:[function(require,module,exports){
+},{"_process":49}],38:[function(require,module,exports){
 'use strict';
 var immediate = require('immediate');
 
@@ -3213,7 +3064,7 @@ function race(iterable) {
   }
 }
 
-},{"immediate":34}],37:[function(require,module,exports){
+},{"immediate":36}],39:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -15404,7 +15255,7 @@ PouchDB$5.plugin(IDBPouch)
 module.exports = PouchDB$5;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"argsarray":16,"debug":38,"events":20,"immediate":34,"inherits":40,"lie":36,"spark-md5":48,"uuid":42,"vuvuzela":49}],38:[function(require,module,exports){
+},{"argsarray":18,"debug":40,"events":22,"immediate":36,"inherits":42,"lie":38,"spark-md5":50,"uuid":44,"vuvuzela":51}],40:[function(require,module,exports){
 (function (process){
 /**
  * This is the web browser implementation of `debug()`.
@@ -15593,7 +15444,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":39,"_process":47}],39:[function(require,module,exports){
+},{"./debug":41,"_process":49}],41:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -15797,7 +15648,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":41}],40:[function(require,module,exports){
+},{"ms":43}],42:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -15822,7 +15673,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -15973,7 +15824,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's'
 }
 
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var v1 = require('./v1');
 var v4 = require('./v4');
 
@@ -15983,7 +15834,7 @@ uuid.v4 = v4;
 
 module.exports = uuid;
 
-},{"./v1":45,"./v4":46}],43:[function(require,module,exports){
+},{"./v1":47,"./v4":48}],45:[function(require,module,exports){
 /**
  * Convert array of 16 byte values to UUID string format of the form:
  * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
@@ -16008,7 +15859,7 @@ function bytesToUuid(buf, offset) {
 
 module.exports = bytesToUuid;
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function (global){
 // Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
@@ -16045,7 +15896,7 @@ if (!rng) {
 module.exports = rng;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -16147,7 +15998,7 @@ function v1(options, buf, offset) {
 
 module.exports = v1;
 
-},{"./lib/bytesToUuid":43,"./lib/rng":44}],46:[function(require,module,exports){
+},{"./lib/bytesToUuid":45,"./lib/rng":46}],48:[function(require,module,exports){
 var rng = require('./lib/rng');
 var bytesToUuid = require('./lib/bytesToUuid');
 
@@ -16178,7 +16029,7 @@ function v4(options, buf, offset) {
 
 module.exports = v4;
 
-},{"./lib/bytesToUuid":43,"./lib/rng":44}],47:[function(require,module,exports){
+},{"./lib/bytesToUuid":45,"./lib/rng":46}],49:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -16360,7 +16211,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function (factory) {
     if (typeof exports === 'object') {
         // Node/CommonJS
@@ -17113,7 +16964,7 @@ process.umask = function() { return 0; };
     return SparkMD5;
 }));
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -17288,7 +17139,7 @@ exports.parse = function (str) {
   }
 };
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -17352,4 +17203,4 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":47}]},{},[12]);
+},{"_process":49}]},{},[13]);

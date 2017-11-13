@@ -1,6 +1,5 @@
 import React from "react";
 import Navibar from "./Navibar";
-import Update from "./Update";
 
 class App extends React.Component {
 	componentWillReceiveProps() {
@@ -11,7 +10,6 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<Update />
 				<Navibar
 					history={this.props.history}
 					params={this.props.params}

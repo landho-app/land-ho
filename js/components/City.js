@@ -1,127 +1,32 @@
 import React from "react";
 import { Link } from "react-router";
+import CityActions from "../actions/CityActions";
+import CityStore from "../stores/CityStore";
 
 class City extends React.Component {
-	// CONSTRUCTOR
 	constructor(props) {
 		super(props);
-		this.state = {
-			content: null
-		};
+
+		this.state = CityStore.getState();
+		this.onChange = this.onChange.bind(this);
 	}
 
-	// COMPONENT DID MOUNT
 	componentDidMount() {
 		var slug = this.props.params.slug;
 		var cityslug = this.props.params.cityslug;
 
-		this.loadData(slug, cityslug);
+		CityStore.listen(this.onChange);
+		CityActions.getCity(slug + "-" + cityslug);
 	}
 
-	// SLUGIFY
-	slugify(text) {
-		return text
-			.toLowerCase()
-			.replace(/[^\w\s-]/g, "") // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
-			.replace(/[\s_-]+/g, "-") // swap any length of whitespace, underscore, hyphen characters with a single -
-			.replace(/^-+|-+$/g, ""); // remove leading, trailing -
+	componentWillUnmount() {
+		CityStore.unlisten(this.onChange);
 	}
 
-	// LOAD DATA
-	loadData(slug, cityslug) {
-		var that = this;
-
-		$.get(
-			"data/" + slug + "/city/" + cityslug + ".html",
-			function(content) {
-				// fix image paths
-				content = content.replace(
-					'src="/images',
-					'src="data/' + slug + "/images"
-				);
-
-				// attach external link icon to external links
-				var $c = $(content);
-				$c.find("a").each(function(i, el) {
-					var href = $(this).attr("href");
-
-					console.log(href);
-
-					// mailto
-					if (href.indexOf("mailto:") !== -1) {
-						$(this).html(
-							"<i class='fa fa-envelope'></i> " + $(this).html()
-						);
-					} else if (
-						href.indexOf("noonsite.com") === -1 &&
-						href.indexOf("http") === 0
-					) {
-						// external link
-						$(this).html(
-							"<i class='fa fa-external-link'></i> " +
-								$(this).html()
-						);
-						$(this).attr("target", "_blank");
-					} else if (
-						href.indexOf("noonsite.com/Countries") !== -1 ||
-						href.indexOf("/Countries") === 0
-					) {
-						// internal links
-						var tmp = href
-							.replace("http://www.noonsite.com", "")
-							.replace("/Countries", "#/country");
-						var tmp_splitted = tmp.split("/");
-
-						var visited_country = false;
-						for (var j in tmp_splitted) {
-							if (visited_country === true) {
-								tmp_splitted[j] = that.slugify(tmp_splitted[j]);
-							}
-
-							if (tmp_splitted[j] === "country") {
-								visited_country = true;
-							}
-						}
-
-						var new_href = tmp_splitted.join("/");
-
-						// is it a city
-						if (new_href.indexOf("/country/" + slug + "/") !== -1) {
-							new_href =
-								"#/city/" +
-								tmp_splitted[tmp_splitted.length - 1];
-						}
-
-						$(this).attr("href", new_href);
-					} else {
-						// a relative link but not /Countries
-						if (href[0] !== "/") {
-							href = "/" + href;
-						}
-
-						$(this).attr("href", "http://www.noonsite.com" + href);
-						$(this).html(
-							"<i class='fa fa-external-link'></i> " +
-								$(this).html()
-						);
-						$(this).attr("target", "_blank");
-					}
-				});
-
-				this.setState({
-					content: $c.html()
-				});
-			}.bind(this)
-		).fail(
-			function() {
-				this.setState({
-					content: -1
-				});
-			}.bind(this)
-		);
+	onChange(state) {
+		this.setState(state);
 	}
 
-	// RENDER
 	render() {
 		if (this.state.content === -1) {
 			return (

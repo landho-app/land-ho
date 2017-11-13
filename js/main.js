@@ -1,3 +1,4 @@
+import db from "./db";
 import React from "react";
 import { Router, Route, hashHistory } from "react-router";
 import ReactDOM from "react-dom";

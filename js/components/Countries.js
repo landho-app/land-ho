@@ -59,7 +59,6 @@ class Countries extends React.Component {
 
 	// RENDER
 	render() {
-		console.log(this.state.countries);
 		if (!this.state.countries) return null;
 
 		var countries = {};

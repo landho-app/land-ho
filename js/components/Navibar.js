@@ -22,7 +22,7 @@ class Navibar extends React.Component {
 	render() {
 		var linkBack = "/";
 		if ("cityslug" in this.props.params) {
-			linkBack = "/country/" + this.props.params.slug + "/profile";
+			linkBack = "/country/" + this.props.params.slug + "/profiles";
 		}
 
 		// info page, return to previous location
@@ -35,7 +35,6 @@ class Navibar extends React.Component {
 		// show back button?
 		var showBackButton =
 			location.hash.indexOf("#/info") >= 0 || "slug" in this.props.params;
-		console.log(showBackButton);
 
 		return (
 			<div className="navbar navbar-default navbar-fixed-top">

@@ -1,5 +1,5 @@
 import alt from "../alt";
-import CountryActions from "../actions/CountryActions";
+import CityActions from "../actions/CityActions";
 
 const slugify = text => {
 	return text
@@ -13,7 +13,7 @@ const slugify = text => {
 };
 
 const prepareContent = result => {
-	var content = result.section;
+	var content = result.city;
 
 	// fix image paths
 	for (var key in result._attachments) {
@@ -84,21 +84,21 @@ const prepareContent = result => {
 	return $c.html();
 };
 
-class CountryStore {
+class CityStore {
 	constructor() {
-		this.bindActions(CountryActions);
+		this.bindActions(CityActions);
 		this.content = null;
 		this.updated = null;
 	}
 
-	getSectionSuccess(result) {
+	getCitySuccess(result) {
 		this.content = prepareContent(result);
 		this.updated = result.updated;
 	}
 
-	getSectionFail(err) {
+	getCityFail(err) {
 		throw err;
 	}
 }
 
-export default alt.createStore(CountryStore);
+export default alt.createStore(CityStore);
