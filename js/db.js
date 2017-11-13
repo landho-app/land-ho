@@ -1,5 +1,6 @@
 import PouchDB from "pouchdb";
 import config from "./_config";
+import UpdateActions from "actions/UpdateActions";
 
 if (!window.db) window.db = {};
 
@@ -13,20 +14,21 @@ if (!window.db) window.db = {};
 				live: true,
 				retry: true
 			})
-			.on("change", () => {
-				console.info("DB changed");
-			})
 			.on("paused", info => {
 				console.info("DB sync paused");
+				UpdateActions.setFinished();
 			})
 			.on("active", info => {
 				console.info("DB sync resumed");
+				UpdateActions.setUpdating();
 			})
 			.on("complete", info => {
 				console.info("DB sync completed");
+				UpdateActions.setFinished();
 			})
 			.on("error", err => {
 				console.error(err);
+				UpdateActions.setFinished();
 			});
 	}
 );

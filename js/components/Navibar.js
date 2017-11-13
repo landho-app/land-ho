@@ -1,7 +1,27 @@
 import React from "react";
 import { Link } from "react-router";
+import UpdateStore from "../stores/UpdateStore";
 
 class Navibar extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = UpdateStore.getState();
+		this.onChange = this.onChange.bind(this);
+	}
+
+	componentDidMount() {
+		UpdateStore.listen(this.onChange);
+	}
+
+	componentWillUnmount() {
+		UpdateStore.unlisten(this.onChange);
+	}
+
+	onChange(state) {
+		console.log(state)
+		this.setState(state);
+	}
+
 	// KEY UP
 	keyUp(e) {
 		// ESC clears selection
@@ -82,6 +102,14 @@ class Navibar extends React.Component {
 							<i className="fa fa-info-circle" />
 						</Link>
 					</p>
+
+					{this.state.updating > 0 ? (
+						<p className="navbar-text navbar-right">
+							<Link to="/info" className="navbar-link info">
+								<<i className="fa-li fa fa-spinner fa-spin"></i> Updating data...
+							</Link>
+						</p>
+					) : null}
 				</div>
 			</div>
 		);
