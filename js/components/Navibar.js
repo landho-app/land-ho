@@ -18,7 +18,7 @@ class Navibar extends React.Component {
 	}
 
 	onChange(state) {
-		console.log(state)
+		console.log(state);
 		this.setState(state);
 	}
 
@@ -106,7 +106,8 @@ class Navibar extends React.Component {
 					{this.state.updating > 0 ? (
 						<p className="navbar-text navbar-right">
 							<Link to="/info" className="navbar-link info">
-								<<i className="fa-li fa fa-spinner fa-spin"></i> Updating data...
+								<i className="fa-li fa fa-spinner fa-spin" />{" "}
+								Updating data...
 							</Link>
 						</p>
 					) : null}

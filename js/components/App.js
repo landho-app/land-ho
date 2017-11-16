@@ -8,15 +8,21 @@ class App extends React.Component {
 
 	// RENDER
 	render() {
-		return (
-			<div>
+		const navibar =
+			this.props.location.pathname !== "/welcome" ? (
 				<Navibar
+					key="navibar"
 					history={this.props.history}
 					params={this.props.params}
 				/>
-				<div className="container">{this.props.children}</div>
+			) : null;
+
+		return [
+			navibar,
+			<div key="main" className="container">
+				{this.props.children}
 			</div>
-		);
+		];
 	}
 }
 

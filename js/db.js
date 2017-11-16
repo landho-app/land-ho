@@ -1,6 +1,6 @@
 import PouchDB from "pouchdb";
 import config from "./_config";
-import UpdateActions from "actions/UpdateActions";
+import UpdateActions from "./actions/UpdateActions";
 
 if (!window.db) window.db = {};
 
@@ -19,11 +19,11 @@ if (!window.db) window.db = {};
 				UpdateActions.setFinished();
 			})
 			.on("active", info => {
-				console.info("DB sync resumed");
+				console.info("DB sync resumed", info);
 				UpdateActions.setUpdating();
 			})
 			.on("complete", info => {
-				console.info("DB sync completed");
+				console.info("DB sync completed", info);
 				UpdateActions.setFinished();
 			})
 			.on("error", err => {
