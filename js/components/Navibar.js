@@ -1,27 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
-import UpdateStore from "../stores/UpdateStore";
+import NavibarUpdates from "./NavibarUpdates";
 
 class Navibar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = UpdateStore.getState();
-		this.onChange = this.onChange.bind(this);
-	}
-
-	componentDidMount() {
-		UpdateStore.listen(this.onChange);
-	}
-
-	componentWillUnmount() {
-		UpdateStore.unlisten(this.onChange);
-	}
-
-	onChange(state) {
-		console.log(state);
-		this.setState(state);
-	}
-
 	// KEY UP
 	keyUp(e) {
 		// ESC clears selection
@@ -63,8 +44,7 @@ class Navibar extends React.Component {
 						{showBackButton === true ? (
 							<Link
 								to={linkBack}
-								className="navbar-brand arrow-left"
-							>
+								className="navbar-brand arrow-left">
 								<i className="fa fa-arrow-left fa-fw" />
 							</Link>
 						) : (
@@ -84,8 +64,7 @@ class Navibar extends React.Component {
 					<center>
 						<div
 							className="navbar-form search-center"
-							role="search"
-						>
+							role="search">
 							<div className="form-group">
 								<input
 									type="text"
@@ -103,14 +82,7 @@ class Navibar extends React.Component {
 						</Link>
 					</p>
 
-					{this.state.updating > 0 ? (
-						<p className="navbar-text navbar-right">
-							<Link to="/info" className="navbar-link info">
-								<i className="fa-li fa fa-spinner fa-spin" />{" "}
-								Updating data...
-							</Link>
-						</p>
-					) : null}
+					<NavibarUpdates />
 				</div>
 			</div>
 		);

@@ -18,8 +18,6 @@ window.dbNames.forEach(database => {
 	window.db[database] = new PouchDB(database);
 });
 
-console.log("Init UpdateActions");
-
 class UpdateActions {
 	constructor() {
 		this.generateActions(
@@ -51,7 +49,6 @@ class UpdateActions {
 						database: database,
 						value: false
 					});
-					console.log(database, "paused");
 				})
 				.on("active", info => {
 					this.actions.setUpdating({

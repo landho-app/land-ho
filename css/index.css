@@ -3,52 +3,52 @@ body {
 }
 
 .navbar-brand-img {
-	display: inline!important;
+	display: inline !important;
 	margin-right: 15px;
 }
 
 .country-list-span {
-	margin-left:15px;
+	margin-left: 15px;
 }
 
 .flag-spacer {
-	width:30px;
-	height:1px;
+	width: 30px;
+	height: 1px;
 }
 
 .info {
 	font-size: 1.4em;
 	margin-top: -1px;
-	color:#000!important;
-	float:right;
+	color: #000 !important;
+	float: right;
 }
 
 .search-center {
-	position:absolute;
-	margin-left:-30%;
-	left:50%;
-	padding:0!important;
-	width:60%;
-	padding-bottom:15px;
+	position: absolute;
+	margin-left: -30%;
+	left: 50%;
+	padding: 0 !important;
+	width: 60%;
+	padding-bottom: 15px;
 }
 
 @media (min-width: 768px) {
 	.search-center {
-		margin-left:-180px;
-		width:360px;
+		margin-left: -180px;
+		width: 360px;
 	}
 
 	.search-center input {
-		width:360px!important;
+		width: 360px !important;
 	}
 }
 
 .navbar-fixed-top {
-	height:55px!important;
+	height: 55px !important;
 }
 
 .arrow-left {
-	float:left;
+	float: left;
 	position: absolute;
 }
 
@@ -59,14 +59,19 @@ body {
 }
 
 .modal-body img {
-	width:100%!important;
+	width: 100% !important;
 	margin-bottom: 10px;
 }
 
 .modal-footer .btn-link {
-	color:grey!important;
+	color: grey !important;
 }
 
 #downloadUpdateBtn {
-	margin-top:20px;
+	margin-top: 20px;
+}
+
+.update-status {
+	color: #999 !important;
+	padding-top: 2px;
 }
