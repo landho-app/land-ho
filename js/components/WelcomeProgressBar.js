@@ -24,8 +24,14 @@ class WelcomeProgressBar extends Component {
 			});
 
 			// redirect to index page if sync was complete
-			console.log(this.state.progressPercentile, updateFinished);
 			if (this.state.progressPercentile > 95 && updateFinished) {
+				// set second start token, to not be directed to the welcome screen again
+				window.localStorage.setItem(
+					"secondStartToken",
+					new Date().getTime()
+				);
+
+				// move to homepage
 				this.context.router.push("/");
 			}
 		});
