@@ -18,12 +18,17 @@ class WelcomeProgressBar extends Component {
 	}
 
 	onChange(state) {
-		this.setState(state);
+		this.setState(state, () => {
+			var updateFinished = Object.values(this.state.updating).every(u => {
+				return u === false;
+			});
 
-		// redirect to index page if sync was complete
-		if (state.progressPercentile > 95 && state.updating == false) {
-			this.context.router.push("/");
-		}
+			// redirect to index page if sync was complete
+			console.log(this.state.progressPercentile, updateFinished);
+			if (this.state.progressPercentile > 95 && updateFinished) {
+				this.context.router.push("/");
+			}
+		});
 	}
 
 	render() {
