@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import WelcomeProgressBar from "./WelcomeProgressBar";
+import UpdateActions from "../actions/UpdateActions";
 
 class Welcome extends Component {
 	constructor(props) {
@@ -9,9 +11,15 @@ class Welcome extends Component {
 	}
 
 	onDownloadClick() {
-		this.setState({
-			downloading: true
-		});
+		this.setState(
+			{
+				downloading: true
+			},
+			() => {
+				UpdateActions.getInfo();
+				UpdateActions.startSync();
+			}
+		);
 	}
 
 	render() {
@@ -34,26 +42,22 @@ class Welcome extends Component {
 						<div
 							className="alert alert-info"
 							role="alert"
-							style={{ marginTop: "30px" }}
-						>
+							style={{ marginTop: "30px" }}>
 							<ul>
 								<li>
-									In order to use Land Ho! offline, you need
-									to download the latest cruising information
-									data.
+									You need to download the latest cruising
+									information data.
 								</li>
 								<li>
-									Make sure to be connected with a reasonable
-									Internet connection: the download size is
-									~45MB
+									Watch your internet connection: the download
+									size is ~45MB
 								</li>
 							</ul>
 							<center>
 								<button
 									className="btn btn-primary btn-lg"
 									style={{ marginTop: "30px" }}
-									onClick={this.onDownloadClick.bind(this)}
-								>
+									onClick={this.onDownloadClick.bind(this)}>
 									<i className="fa fa-download" /> Start
 									download
 								</button>
@@ -69,20 +73,8 @@ class Welcome extends Component {
 								</p>
 								<div
 									className="progress"
-									style={{ marginTop: "10px" }}
-								>
-									<div
-										className="progress-bar progress-bar-info progress-bar-striped"
-										role="progressbar"
-										aria-valuenow="45"
-										aria-valuemin="0"
-										aria-valuemax="100"
-										style={{ width: "45%" }}
-									>
-										<span className="sr-only">
-											45% Complete
-										</span>
-									</div>
+									style={{ marginTop: "10px" }}>
+									<WelcomeProgressBar />
 								</div>
 							</center>
 						</div>

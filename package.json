@@ -1,38 +1,38 @@
 {
-	"name": "land-ho",
-	"description":
-		"Sailboat Cruising Guides for all the Countries in the World",
-	"version": "2.0.0",
-	"scripts": {
-		"start": "gulp && open ./index.html",
-		"postinstall": "bower install && gulp build"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/thomasbrueggemann/land-ho.git"
-	},
-	"dependencies": {
-		"alt": "^0.17.4",
-		"async": "^1.4.2",
-		"babel": "^5.8.23",
-		"colors": "^1.1.2",
-		"history": "^1.12.5",
-		"pouchdb": "^6.3.4",
-		"react": "16.1.0",
-		"react-dom": "16.1.0",
-		"react-router": "3.2.0",
-		"underscore": "^1.8.3"
-	},
-	"devDependencies": {
-		"babelify": "^6.3.0",
-		"bower": "^1.6.3",
-		"browserify": "^11.2.0",
-		"gulp": "^3.9.0",
-		"gulp-concat": "^2.6.0",
-		"gulp-sourcemaps": "^2.6.1",
-		"gulp-util": "^3.0.6",
-		"vinyl-source-stream": "^1.1.0",
-		"watchify": "^3.4.0"
-	},
-	"license": "MIT"
+  "name": "land-ho",
+  "description": "Sailboat Cruising Guides for all the Countries in the World",
+  "version": "2.0.0",
+  "scripts": {
+    "start": "gulp && open ./index.html",
+    "postinstall": "bower install && gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasbrueggemann/land-ho.git"
+  },
+  "dependencies": {
+    "alt": "^0.17.4",
+    "async": "^2.6.0",
+    "babel": "^5.8.23",
+    "colors": "^1.1.2",
+    "history": "^1.12.5",
+    "pouchdb": "^6.3.4",
+    "prop-types": "^15.6.0",
+    "react": "16.1.0",
+    "react-dom": "16.1.0",
+    "react-router": "3.2.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "babelify": "^6.3.0",
+    "bower": "^1.6.3",
+    "browserify": "^11.2.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-util": "^3.0.6",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
+  },
+  "license": "MIT"
 }
