@@ -60,9 +60,10 @@ class City extends React.Component {
 								style={{ marginTop: "15px" }}>
 								<small>
 									Last updated:{" "}
-									{moment(
-										this.state.updated / 1000
-									).fromNow()}
+									{moment
+										.unix(this.state.updated)
+										.local()
+										.fromNow()}
 								</small>
 							</p>
 						</center>

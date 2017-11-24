@@ -47,7 +47,7 @@ class Country extends React.Component {
 		if (this.props.params.part === "generalinfos")
 			generalinfosClassName += " hovered";
 
-		console.log(moment(this.state.updated / 1000).toISOString());
+		console.log(moment.unix(this.state.updated).toISOString());
 
 		return (
 			<div className="row">
@@ -97,7 +97,10 @@ class Country extends React.Component {
 						<p className="text-muted">
 							<small>
 								Last updated:{" "}
-								{moment(this.state.updated / 1000).fromNow()}
+								{moment
+									.unix(this.state.updated)
+									.local()
+									.fromNow()}
 							</small>
 						</p>
 					</center>
