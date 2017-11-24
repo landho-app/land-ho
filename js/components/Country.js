@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import CountryActions from "../actions/CountryActions";
 import CountryStore from "../stores/CountryStore";
+import moment from "moment";
 
 class Country extends React.Component {
 	constructor(props) {
@@ -46,6 +47,8 @@ class Country extends React.Component {
 		if (this.props.params.part === "generalinfos")
 			generalinfosClassName += " hovered";
 
+		console.log(moment(this.state.updated / 1000).toISOString());
+
 		return (
 			<div className="row">
 				<div className="col-md-3">
@@ -56,8 +59,7 @@ class Country extends React.Component {
 								this.props.params.slug +
 								"/profiles"
 							}
-							className={profilesClassName}
-						>
+							className={profilesClassName}>
 							<i
 								className="fa fa-user fa-fw"
 								aria-hidden="true"
@@ -70,8 +72,7 @@ class Country extends React.Component {
 								this.props.params.slug +
 								"/generalinfos"
 							}
-							className={generalinfosClassName}
-						>
+							className={generalinfosClassName}>
 							<i
 								className="fa fa-globe fa-fw"
 								aria-hidden="true"
@@ -84,8 +85,7 @@ class Country extends React.Component {
 								this.props.params.slug +
 								"/formalities"
 							}
-							className={formalitiesClassName}
-						>
+							className={formalitiesClassName}>
 							<i
 								className="fa fa-book fa-fw"
 								aria-hidden="true"
@@ -93,6 +93,14 @@ class Country extends React.Component {
 							Formalities
 						</Link>
 					</div>
+					<center>
+						<p className="text-muted">
+							<small>
+								Last updated:{" "}
+								{moment(this.state.updated / 1000).fromNow()}
+							</small>
+						</p>
+					</center>
 				</div>
 				<div
 					className="col-md-9"
