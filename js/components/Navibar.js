@@ -22,23 +22,17 @@ class Navibar extends React.Component {
 		this.context.router.push("/countries/" + encodeURIComponent(v));
 	}
 
+	// GO TO
+	goTo() {
+		this.context.router.goBack();
+	}
+
 	// RENDER
 	render() {
-		var linkBack = "/";
-		if ("cityslug" in this.props.params) {
-			linkBack = "/country/" + this.props.params.slug + "/profiles";
-		}
-
-		// info page, return to previous location
-		if (location.hash.indexOf("#/info") >= 0) {
-			if (window.previousLocation) {
-				linkBack = window.previousLocation.pathname;
-			}
-		}
-
 		// show back button?
 		var showBackButton =
-			location.hash.indexOf("#/info") >= 0 || "slug" in this.props.params;
+			this.context.router.location.pathname.indexOf("/info") >= 0 ||
+			"slug" in this.props.params;
 
 		return (
 			<div className="navbar navbar-default navbar-fixed-top">
@@ -46,7 +40,8 @@ class Navibar extends React.Component {
 					<div className="navbar-header">
 						{showBackButton === true ? (
 							<Link
-								to={linkBack}
+								onClick={this.goTo.bind(this)}
+								style={{ cursor: "pointer" }}
 								className="navbar-brand arrow-left">
 								<i className="fa fa-arrow-left fa-fw" />
 							</Link>
