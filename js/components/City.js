@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import CityActions from "../actions/CityActions";
 import CityStore from "../stores/CityStore";
+import moment from "moment";
 
 class City extends React.Component {
 	constructor(props) {
@@ -52,7 +53,20 @@ class City extends React.Component {
 		} else {
 			return (
 				<div className="row">
-					<div className="col-md-3" />
+					<div className="col-md-3">
+						<center>
+							<p
+								className="text-muted"
+								style={{ marginTop: "15px" }}>
+								<small>
+									Last updated:{" "}
+									{moment(
+										this.state.updated / 1000
+									).fromNow()}
+								</small>
+							</p>
+						</center>
+					</div>
 					<div
 						className="col-md-9"
 						dangerouslySetInnerHTML={{ __html: this.state.content }}

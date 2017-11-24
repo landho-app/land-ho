@@ -10,11 +10,7 @@ class App extends React.Component {
 	render() {
 		const navibar =
 			this.props.location.pathname !== "/welcome" ? (
-				<Navibar
-					key="navibar"
-					history={this.props.history}
-					params={this.props.params}
-				/>
+				<Navibar key="navibar" params={this.props.params} />
 			) : null;
 
 		return [

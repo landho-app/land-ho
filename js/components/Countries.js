@@ -23,46 +23,25 @@ class Countries extends React.Component {
 		this.setState(state);
 	}
 
-	// COMPONENT WILL RECEIVE PROPS
-	/*componentWillReceiveProps(nextProps) {
-		var query = nextProps.params.query;
-		if (query && query.length > 0) {
-			var countries = {};
-
-			for (var area in this.state.original) {
-				countries[area] = [];
-				for (var c in this.state.original[area]) {
-					var country = this.state.original[area][c];
-					if (
-						country.name
-							.toLowerCase()
-							.indexOf(query.toLowerCase()) >= 0
-					) {
-						countries[area].push(country);
-					}
-				}
-
-				if (countries[area].length === 0) {
-					delete countries[area];
-				}
-			}
-
-			this.setState({
-				countries: countries
-			});
-		} else {
-			this.setState({
-				countries: this.state.original
-			});
-		}
-	}*/
-
 	// RENDER
 	render() {
 		if (!this.state.countries) return null;
 
+		var orignalCountries = this.state.countries;
+
+		// query param exists
+		if (this.props.params.query) {
+			orignalCountries = this.state.countries.filter(country => {
+				return (
+					country.name
+						.toLowerCase()
+						.indexOf(this.props.params.query.toLowerCase()) >= 0
+				);
+			});
+		}
+
 		var countries = {};
-		this.state.countries.forEach(country => {
+		orignalCountries.forEach(country => {
 			if (!(country.continent in countries)) {
 				countries[country.continent] = [];
 			}
@@ -82,8 +61,7 @@ class Countries extends React.Component {
 								<Link
 									key={c._id}
 									to={"/country/" + c._id}
-									className="list-group-item"
-								>
+									className="list-group-item">
 									{c.flag ? (
 										<img
 											className="flag-icon"

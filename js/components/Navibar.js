@@ -1,22 +1,25 @@
 import React from "react";
 import { Link } from "react-router";
 import NavibarUpdates from "./NavibarUpdates";
+import PropTypes from "prop-types";
 
 class Navibar extends React.Component {
+	// CONSTRUCTOR
+	constructor(props, context) {
+		super(props, context);
+	}
+
 	// KEY UP
 	keyUp(e) {
 		// ESC clears selection
 		if (e.keyCode === 27) {
 			e.target.value = "";
-			this.props.history.pushState(null, "/");
+			this.context.router.push("/");
 			return;
 		}
 
 		var v = e.target.value;
-		this.props.history.replaceState(
-			null,
-			"/countries/" + encodeURIComponent(v)
-		);
+		this.context.router.push("/countries/" + encodeURIComponent(v));
 	}
 
 	// RENDER
@@ -88,5 +91,9 @@ class Navibar extends React.Component {
 		);
 	}
 }
+
+Navibar.contextTypes = {
+	router: PropTypes.object.isRequired
+};
 
 export default Navibar;
