@@ -47,8 +47,6 @@ class Country extends React.Component {
 		if (this.props.params.part === "generalinfos")
 			generalinfosClassName += " hovered";
 
-		console.log(moment.unix(this.state.updated).toISOString());
-
 		return (
 			<div className="row">
 				<div className="col-md-3">
