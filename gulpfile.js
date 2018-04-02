@@ -7,13 +7,7 @@ const browserify = require("browserify");
 const watchify = require("watchify");
 const sourcemaps = require("gulp-sourcemaps");
 
-const dependencies = [
-	"alt",
-	"react",
-	"react-dom",
-	"react-router",
-	"underscore"
-];
+const dependencies = ["alt", "react", "react-dom", "react-router", "underscore"];
 
 /*
  |--------------------------------------------------------------------------
@@ -89,10 +83,7 @@ gulp.task("browserify-watch", ["browserify-vendor"], function() {
 			})
 			.on("end", function() {
 				gutil.log(
-					gutil.colors.green(
-						"Finished rebundling JS in",
-						Date.now() - start + "ms."
-					)
+					gutil.colors.green("Finished rebundling JS in", Date.now() - start + "ms.")
 				);
 			})
 			.pipe(source("bundle.js"))
