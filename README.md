@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cdn.rawgit.com/thomasbrueggemann/land-ho/master/img/icon.png" width="250" />
+  <img src="https://cdn.jsdelivr.net/gh/thomasbrueggemann/land-ho/img/icon.png" width="250" />
 </p>
 
 # Land Ho!
